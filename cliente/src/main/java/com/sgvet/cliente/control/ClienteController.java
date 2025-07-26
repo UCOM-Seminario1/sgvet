@@ -29,4 +29,23 @@ public class ClienteController {
         return clienteRepository.listarTodos();
     }
     
+    public boolean eliminarCliente(Integer id) {
+        // Lógica para eliminar un cliente por ID
+        try {
+            return clienteRepository.eliminarClientePorId(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public Cliente buscarClientePorId(Integer id) {
+        // Lógica para buscar un cliente por ID
+        try {
+            return clienteRepository.buscarClientePorId(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
