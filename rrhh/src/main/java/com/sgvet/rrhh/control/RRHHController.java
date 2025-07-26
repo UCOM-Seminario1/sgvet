@@ -14,8 +14,7 @@ public class RRHHController {
     public Boolean crearRRHH(RRHH RRHH) {
         // Lógica para crear un RRHH
         try{
-
-            //rrhhRepository.insertar(RRHH);
+            rrhhRepository.insertar(RRHH);
             return true;
         } 
         catch (Exception e) {
