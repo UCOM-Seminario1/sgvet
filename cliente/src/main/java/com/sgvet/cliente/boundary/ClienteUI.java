@@ -81,7 +81,141 @@ public class ClienteUI {
     }
 
     private static void buscarCliente(Scanner scanner) {
-        System.out.println("Funcionalidad para buscar cliente (pendiente de implementar).");
-        // Aquí iría la lógica para buscar un cliente
+        int opcionBusqueda = -1;
+        
+        while (opcionBusqueda != 0) {
+            System.out.println("\n--- Menu de Busqueda de Clientes ---");
+            System.out.println("1. Buscar por ID");
+            System.out.println("2. Buscar por nombre");
+            System.out.println("3. Buscar por apellido");
+            System.out.println("4. Buscar por teléfono");
+            System.out.println("5. Búsqueda general");
+            System.out.println("0. Volver al menu de clientes");
+            System.out.print("Seleccione una opcion de busqueda (0-5): ");
+            
+            if (scanner.hasNextInt()) {
+                opcionBusqueda = scanner.nextInt();
+                scanner.nextLine(); // Limpiar buffer
+                
+                switch (opcionBusqueda) {
+                    case 1:
+                        buscarPorId(scanner);
+                        break;
+                    case 2:
+                        buscarPorNombre(scanner);
+                        break;
+                    case 3:
+                        buscarPorApellido(scanner);
+                        break;
+                    case 4:
+                        buscarPorTelefono(scanner);
+                        break;
+                    case 5:
+                        buscarGeneral(scanner);
+                        break;
+                    case 0:
+                        System.out.println("Volviendo al menu de clientes...");
+                        break;
+                    default:
+                        System.out.println("Opcion invalida. Intente de nuevo.");
+                }
+            } else {
+                System.out.println("Por favor, ingrese un numero valido.");
+                scanner.next(); // Limpiar entrada inválida
+            }
+        }
+    }
+
+    private static void buscarPorId(Scanner scanner) {
+        System.out.print("Ingrese el ID del cliente a buscar: ");
+        if (scanner.hasNextInt()) {
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Limpiar buffer
+            
+            Cliente cliente = clienteController.buscarClientePorId(id);
+            if (cliente != null) {
+                System.out.println("\n--- Cliente Encontrado ---");
+                mostrarCliente(cliente);
+            } else {
+                System.out.println("No se encontró ningún cliente con el ID: " + id);
+            }
+        } else {
+            System.out.println("Por favor, ingrese un ID válido (número entero).");
+            scanner.next(); // Limpiar entrada inválida
+        }
+    }
+
+    private static void buscarPorNombre(Scanner scanner) {
+        System.out.print("Ingrese el nombre del cliente a buscar: ");
+        String nombre = scanner.nextLine().trim();
+        
+        if (!nombre.isEmpty()) {
+            List<Cliente> clientes = clienteController.buscarClientesPorNombre(nombre);
+            mostrarResultadosBusqueda(clientes, "nombre", nombre);
+        } else {
+            System.out.println("Por favor, ingrese un nombre válido.");
+        }
+    }
+
+    private static void buscarPorApellido(Scanner scanner) {
+        System.out.print("Ingrese el apellido del cliente a buscar: ");
+        String apellido = scanner.nextLine().trim();
+        
+        if (!apellido.isEmpty()) {
+            List<Cliente> clientes = clienteController.buscarClientesPorApellido(apellido);
+            mostrarResultadosBusqueda(clientes, "apellido", apellido);
+        } else {
+            System.out.println("Por favor, ingrese un apellido válido.");
+        }
+    }
+
+    private static void buscarPorTelefono(Scanner scanner) {
+        System.out.print("Ingrese el teléfono del cliente a buscar: ");
+        String telefono = scanner.nextLine().trim();
+        
+        if (!telefono.isEmpty()) {
+            List<Cliente> clientes = clienteController.buscarClientesPorTelefono(telefono);
+            mostrarResultadosBusqueda(clientes, "teléfono", telefono);
+        } else {
+            System.out.println("Por favor, ingrese un teléfono válido.");
+        }
+    }
+
+    private static void buscarGeneral(Scanner scanner) {
+        System.out.print("Ingrese el criterio de búsqueda (nombre, apellido o teléfono): ");
+        String criterio = scanner.nextLine().trim();
+        
+        if (!criterio.isEmpty()) {
+            List<Cliente> clientes = clienteController.buscarClientesGeneral(criterio);
+            mostrarResultadosBusqueda(clientes, "criterio general", criterio);
+        } else {
+            System.out.println("Por favor, ingrese un criterio de búsqueda válido.");
+        }
+    }
+
+    private static void mostrarResultadosBusqueda(List<Cliente> clientes, String tipo, String criterio) {
+        if (clientes != null && !clientes.isEmpty()) {
+            System.out.println("\n--- Resultados de búsqueda por " + tipo + ": '" + criterio + "' ---");
+            System.out.println("Se encontraron " + clientes.size() + " cliente(s):");
+            System.out.println();
+            
+            for (int i = 0; i < clientes.size(); i++) {
+                System.out.println("Cliente " + (i + 1) + ":");
+                mostrarCliente(clientes.get(i));
+                if (i < clientes.size() - 1) {
+                    System.out.println("---");
+                }
+            }
+        } else {
+            System.out.println("No se encontraron clientes con el " + tipo + ": '" + criterio + "'");
+        }
+    }
+
+    private static void mostrarCliente(Cliente cliente) {
+        System.out.println("ID: " + cliente.getId());
+        System.out.println("Nombre: " + cliente.getNombre());
+        System.out.println("Apellido: " + cliente.getApellido());
+        System.out.println("Edad: " + cliente.getEdad());
+        System.out.println("Teléfono: " + cliente.getTelefono());
     }
 }
