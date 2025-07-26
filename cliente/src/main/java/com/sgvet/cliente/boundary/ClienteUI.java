@@ -23,8 +23,9 @@ public class ClienteUI {
             System.out.println("2. Listar clientes");
             System.out.println("3. Eliminar cliente");
             System.out.println("4. Buscar cliente");
+            System.out.println("5. Modificar cliente");
             System.out.println("0. Volver al menu principal");
-            System.out.print("Seleccione una opcion (0-4): ");
+            System.out.print("Seleccione una opcion (0-5): ");
 
             if (scanner.hasNextInt()) {
                 opcion = scanner.nextInt();
@@ -41,6 +42,9 @@ public class ClienteUI {
                         break;
                     case 4:
                         buscarCliente(scanner);
+                        break;
+                    case 5:
+                        modificarCliente(scanner);
                         break;
                     case 0:
                         System.out.println("Volviendo al menu principal...");
@@ -84,4 +88,93 @@ public class ClienteUI {
         System.out.println("Funcionalidad para buscar cliente (pendiente de implementar).");
         // Aquí iría la lógica para buscar un cliente
     }
+
+    private static void modificarCliente(Scanner scanner) {
+        System.out.println("\n--- Modificar Cliente ---");
+        
+        // Solicitar ID del cliente a modificar
+        System.out.print("Ingrese el ID del cliente a modificar: ");
+        Integer idCliente = null;
+        
+        try {
+            idCliente = Integer.parseInt(scanner.nextLine());
+        } catch (NumberFormatException e) {
+            System.out.println("Error: El ID debe ser un número válido.");
+            return;
+        }
+        
+        // Buscar el cliente existente
+        Cliente clienteExistente = clienteController.buscarClientePorId(idCliente);
+        
+        if (clienteExistente == null) {
+            System.out.println("Error: No se encontró un cliente con el ID " + idCliente);
+            return;
+        }
+        
+        // Mostrar datos actuales
+        System.out.println("\nDatos actuales del cliente:");
+        System.out.println("ID: " + clienteExistente.getId());
+        System.out.println("Nombre: " + clienteExistente.getNombre());
+        System.out.println("Apellido: " + clienteExistente.getApellido());
+        System.out.println("Edad: " + clienteExistente.getEdad());
+        System.out.println("Teléfono: " + clienteExistente.getTelefono());
+        
+        // Solicitar nuevos datos
+        System.out.println("\nIngrese los nuevos datos (presione Enter para mantener el valor actual):");
+        
+        System.out.print("Nuevo nombre [" + clienteExistente.getNombre() + "]: ");
+        String nuevoNombre = scanner.nextLine().trim();
+        if (nuevoNombre.isEmpty()) {
+            nuevoNombre = clienteExistente.getNombre();
+        }
+        
+        System.out.print("Nuevo apellido [" + clienteExistente.getApellido() + "]: ");
+        String nuevoApellido = scanner.nextLine().trim();
+        if (nuevoApellido.isEmpty()) {
+            nuevoApellido = clienteExistente.getApellido();
+        }
+        
+        System.out.print("Nueva edad [" + clienteExistente.getEdad() + "]: ");
+        String nuevaEdadStr = scanner.nextLine().trim();
+        Integer nuevaEdad = clienteExistente.getEdad();
+        if (!nuevaEdadStr.isEmpty()) {
+            try {
+                nuevaEdad = Integer.parseInt(nuevaEdadStr);
+            } catch (NumberFormatException e) {
+                System.out.println("Error: La edad debe ser un número válido. Se mantendrá la edad actual.");
+            }
+        }
+        
+        System.out.print("Nuevo teléfono [" + clienteExistente.getTelefono() + "]: ");
+        String nuevoTelefono = scanner.nextLine().trim();
+        if (nuevoTelefono.isEmpty()) {
+            nuevoTelefono = clienteExistente.getTelefono();
+        }
+        
+        // Crear objeto cliente con los datos actualizados
+        Cliente clienteActualizado = new Cliente(
+            clienteExistente.getId(),
+            nuevoNombre,
+            nuevoApellido,
+            nuevaEdad,
+            nuevoTelefono
+        );
+        
+        // Confirmar cambios
+        System.out.println("\n¿Está seguro de que desea aplicar estos cambios? (s/n): ");
+        String confirmacion = scanner.nextLine().trim().toLowerCase();
+        
+        if (confirmacion.equals("s") || confirmacion.equals("si") || confirmacion.equals("sí")) {
+            // Aplicar cambios
+            Boolean resultado = clienteController.modificarCliente(clienteActualizado);
+            
+            if (resultado) {
+                System.out.println("Cliente modificado exitosamente.");
+            } else {
+                System.out.println("Error: No se pudo modificar el cliente.");
+            }
+        } else {
+            System.out.println("Operación cancelada.");
+        }
+    }5
 }
