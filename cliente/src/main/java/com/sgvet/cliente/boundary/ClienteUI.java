@@ -57,31 +57,128 @@ public class ClienteUI {
     }
 
     private static void crearCliente(Scanner scanner) {
-        System.out.println("Funcionalidad para crear cliente (pendiente de implementar).");
-        // Aquí iría la lógica para crear un cliente
+        System.out.println("\n--- Crear Nuevo Cliente ---");
+        
+        try {
+            System.out.print("Ingrese el ID del cliente: ");
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Limpiar buffer
+            
+            System.out.print("Ingrese el nombre del cliente: ");
+            String nombre = scanner.nextLine();
+            
+            System.out.print("Ingrese el apellido del cliente: ");
+            String apellido = scanner.nextLine();
+            
+            System.out.print("Ingrese la edad del cliente: ");
+            int edad = scanner.nextInt();
+            scanner.nextLine(); // Limpiar buffer
+            
+            System.out.print("Ingrese el teléfono del cliente: ");
+            String telefono = scanner.nextLine();
+            
+            // Crear el objeto Cliente
+            Cliente nuevoCliente = new Cliente(id, nombre, apellido, edad, telefono);
+            
+            // Intentar crear el cliente
+            boolean creado = clienteController.crearCliente(nuevoCliente);
+            
+            if (creado) {
+                System.out.println("Cliente creado exitosamente.");
+            } else {
+                System.out.println("Error al crear el cliente.");
+            }
+            
+        } catch (Exception e) {
+            System.out.println("Error en la entrada de datos. Asegúrese de ingresar valores válidos.");
+            scanner.nextLine(); // Limpiar buffer en caso de error
+        }
     }
 
     private static void listarClientes() {
-        System.out.println("Funcionalidad para listar clientes (pendiente de implementar).");
-        List<Cliente> listaClientes=  clienteController.listarClientes();
-        for (Cliente cliente: listaClientes){
-            System.out.println("Nombre:" + cliente.getNombre());
-            System.out.println("Apellido:" + cliente.getApellido());
-            System.out.println("Telefono:" + cliente.getTelefono());
-            System.out.println("Edad:" + cliente.getEdad());
-            System.out.println("Id:" + cliente.getId());
-
+        System.out.println("\n--- Lista de Clientes ---");
+        List<Cliente> listaClientes = clienteController.listarClientes();
+        
+        if (listaClientes.isEmpty()) {
+            System.out.println("No hay clientes registrados.");
+        } else {
+            System.out.println("Total de clientes: " + listaClientes.size());
+            System.out.println("----------------------------------------");
+            for (Cliente cliente : listaClientes) {
+                System.out.println("ID: " + cliente.getId());
+                System.out.println("Nombre: " + cliente.getNombre());
+                System.out.println("Apellido: " + cliente.getApellido());
+                System.out.println("Edad: " + cliente.getEdad());
+                System.out.println("Teléfono: " + cliente.getTelefono());
+                System.out.println("----------------------------------------");
+            }
         }
-        // Aquí iría la lógica para listar clientes
     }
 
     private static void eliminarCliente(Scanner scanner) {
-        System.out.println("Funcionalidad para eliminar cliente (pendiente de implementar).");
-        // Aquí iría la lógica para eliminar un cliente
+        System.out.println("\n--- Eliminar Cliente ---");
+        System.out.print("Ingrese el ID del cliente a eliminar: ");
+        
+        if (scanner.hasNextInt()) {
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Limpiar buffer
+            
+            // Primero buscar el cliente para mostrar sus datos
+            Cliente cliente = clienteController.buscarClientePorId(id);
+            
+            if (cliente != null) {
+                System.out.println("\nCliente encontrado:");
+                System.out.println("ID: " + cliente.getId());
+                System.out.println("Nombre: " + cliente.getNombre());
+                System.out.println("Apellido: " + cliente.getApellido());
+                System.out.println("Edad: " + cliente.getEdad());
+                System.out.println("Teléfono: " + cliente.getTelefono());
+                
+                System.out.print("\n¿Está seguro que desea eliminar este cliente? (s/n): ");
+                String confirmacion = scanner.nextLine().toLowerCase();
+                
+                if (confirmacion.equals("s") || confirmacion.equals("si")) {
+                    boolean eliminado = clienteController.eliminarCliente(id);
+                    if (eliminado) {
+                        System.out.println("Cliente eliminado exitosamente.");
+                    } else {
+                        System.out.println("Error al eliminar el cliente.");
+                    }
+                } else {
+                    System.out.println("Operación cancelada.");
+                }
+            } else {
+                System.out.println("No se encontró un cliente con el ID: " + id);
+            }
+        } else {
+            System.out.println("Por favor, ingrese un ID válido (número entero).");
+            scanner.next(); // Limpiar entrada inválida
+        }
     }
 
     private static void buscarCliente(Scanner scanner) {
-        System.out.println("Funcionalidad para buscar cliente (pendiente de implementar).");
-        // Aquí iría la lógica para buscar un cliente
+        System.out.println("\n--- Buscar Cliente ---");
+        System.out.print("Ingrese el ID del cliente a buscar: ");
+        
+        if (scanner.hasNextInt()) {
+            int id = scanner.nextInt();
+            scanner.nextLine(); // Limpiar buffer
+            
+            Cliente cliente = clienteController.buscarClientePorId(id);
+            
+            if (cliente != null) {
+                System.out.println("\nCliente encontrado:");
+                System.out.println("ID: " + cliente.getId());
+                System.out.println("Nombre: " + cliente.getNombre());
+                System.out.println("Apellido: " + cliente.getApellido());
+                System.out.println("Edad: " + cliente.getEdad());
+                System.out.println("Teléfono: " + cliente.getTelefono());
+            } else {
+                System.out.println("No se encontró un cliente con el ID: " + id);
+            }
+        } else {
+            System.out.println("Por favor, ingrese un ID válido (número entero).");
+            scanner.next(); // Limpiar entrada inválida
+        }
     }
 }
