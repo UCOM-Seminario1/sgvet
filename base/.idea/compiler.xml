@@ -10,11 +10,14 @@
         <module name="cliente" />
         <module name="sgvet" />
         <module name="ui" />
-        <module name="mascota" />
         <module name="sgvet (1) (com.sgvet.cliente)" />
-        <module name="proveedor" />
         <module name="base" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="mascota" target="11" />
+      <module name="proveedor" target="11" />
+      <module name="rrhh" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

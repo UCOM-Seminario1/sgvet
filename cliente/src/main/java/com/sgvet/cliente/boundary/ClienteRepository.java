@@ -51,40 +51,4 @@ public class ClienteRepository {
             e.printStackTrace();
         }
     }
-
-    public boolean eliminarClientePorId(Integer id) {
-        String sql = "DELETE FROM CLIENTE WHERE ID = ?";
-        
-        try (PreparedStatement ps = ClienteDbManager.getConnection().prepareStatement(sql)) {
-            ps.setInt(1, id);
-            int filasAfectadas = ps.executeUpdate();
-            return filasAfectadas > 0; // Retorna true si se eliminó al menos una fila
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    public Cliente buscarClientePorId(Integer id) {
-        String sql = "SELECT * FROM CLIENTE WHERE ID = ?";
-        
-        try (PreparedStatement ps = ClienteDbManager.getConnection().prepareStatement(sql)) {
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            
-            if (rs.next()) {
-                return new Cliente(
-                    rs.getInt("ID"),
-                    rs.getString("NOMBRE"),
-                    rs.getString("APELLIDO"),
-                    rs.getInt("EDAD"),
-                    rs.getString("TELEFONO")
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        
-        return null; // Retorna null si no se encuentra el cliente
-    }
 }
