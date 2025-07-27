@@ -72,3 +72,6 @@ El módulo utiliza Apache Derby como base de datos. Los scripts de inicializaci�
 - Módulo base (com.sgvet:base:1.0-SNAPSHOT)
 - JUnit para pruebas (scope test)
 - Java 11
+## Modulo de clientes
+- Funcionalidades
+* Modificar datos de clientes

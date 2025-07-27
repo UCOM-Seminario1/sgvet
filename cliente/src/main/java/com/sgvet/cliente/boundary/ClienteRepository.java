@@ -51,4 +51,45 @@ public class ClienteRepository {
             e.printStackTrace();
         }
     }
+
+    public Boolean modificarCliente(Cliente cliente) {
+        String sql = "UPDATE CLIENTE SET NOMBRE = ?, APELLIDO = ?, EDAD = ?, TELEFONO = ? WHERE ID = ?";
+
+        try (PreparedStatement ps = ClienteDbManager.getConnection().prepareStatement(sql)) {
+            ps.setString(1, cliente.getNombre());
+            ps.setString(2, cliente.getApellido());
+            ps.setInt(3, cliente.getEdad());
+            ps.setString(4, cliente.getTelefono());
+            ps.setInt(5, cliente.getId());
+            
+            int filasAfectadas = ps.executeUpdate();
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public Cliente buscarPorId(Integer id) {
+        String sql = "SELECT * FROM CLIENTE WHERE ID = ?";
+
+        try (PreparedStatement ps = ClienteDbManager.getConnection().prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new Cliente(
+                        rs.getInt("ID"),
+                        rs.getString("NOMBRE"),
+                        rs.getString("APELLIDO"),
+                        rs.getInt("EDAD"),
+                        rs.getString("TELEFONO")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }
