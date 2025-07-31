@@ -28,7 +28,6 @@ public class ClienteController {
         // Lógica para listar todos los clientes
         return clienteRepository.listarTodos();
     }
-
     // Métodos de búsqueda
     public Cliente buscarClientePorId(Integer id) {
         try {
@@ -38,6 +37,7 @@ public class ClienteController {
             return null;
         }
     }
+
 
     public List<Cliente> buscarClientesPorNombre(String nombre) {
         try {
@@ -83,4 +83,6 @@ public class ClienteController {
             return false;
         }
     }
+    
 }
+
