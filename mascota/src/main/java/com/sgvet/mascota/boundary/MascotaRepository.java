@@ -9,11 +9,20 @@ import com.sgvet.mascota.entity.Mascota;
 public class MascotaRepository {
     MascotaDbManager mascotaDbManager = MascotaDbManager.getInstance();
 
+    private static final String COL_ID = "ID";
+    private static final String COL_NOMBRE = "NOMBRE";
+    private static final String COL_APELLIDO = "APELLIDO";
+    private static final String COL_EDAD = "EDAD";
+    private static final String COL_TELEFONO = "TELEFONO";
+    private static final String COL_IDCLIENTE = "IDCLIENTE";
+    private static final String COL_TIPOMASCOTA = "TIPOMASCOTA";
+    private static final String COL_RAZA = "RAZA";
+
     public MascotaRepository() {
     }
 
     public boolean eliminarPorId(int id) {
-        String sql = "DELETE FROM Mascota WHERE ID = ?";
+        String sql = "DELETE FROM Mascota WHERE " + COL_ID + " = ?";
         try (PreparedStatement ps = MascotaDbManager.getConnection().prepareStatement(sql)) {
             ps.setInt(1, id);
             int affected = ps.executeUpdate();
@@ -27,21 +36,21 @@ public class MascotaRepository {
 
     public List<Mascota> listarTodos() {
         List<Mascota> Mascotas = new ArrayList<>();
-        String sql = "SELECT * FROM Mascota";
+        String sql = "SELECT " + COL_ID + ", " + COL_NOMBRE + ", " + COL_APELLIDO + ", " + COL_EDAD + ", " + COL_TELEFONO + ", " + COL_IDCLIENTE + ", " + COL_TIPOMASCOTA + ", " + COL_RAZA + " FROM Mascota";
 
         try (Statement stmt = MascotaDbManager.getConnection().createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
                 Mascota c = new Mascota(
-                        rs.getInt("ID"),
-                        rs.getString("NOMBRE"),
-                        rs.getString("APELLIDO"),
-                        rs.getInt("EDAD"),
-                        rs.getString("TELEFONO"),
-                        rs.getInt("IDCLIENTE"),
-                        rs.getString("TIPOMASCOTA"),
-                        rs.getString("RAZA")
+                        rs.getInt(COL_ID),
+                        rs.getString(COL_NOMBRE),
+                        rs.getString(COL_APELLIDO),
+                        rs.getInt(COL_EDAD),
+                        rs.getString(COL_TELEFONO),
+                        rs.getInt(COL_IDCLIENTE),
+                        rs.getString(COL_TIPOMASCOTA),
+                        rs.getString(COL_RAZA)
                 );
                 Mascotas.add(c);
             }
@@ -53,20 +62,20 @@ public class MascotaRepository {
     }
 
     public Mascota buscarPorId(int id) {
-        String sql = "SELECT * FROM Mascota WHERE ID = ?";
+        String sql = "SELECT " + COL_ID + ", " + COL_NOMBRE + ", " + COL_APELLIDO + ", " + COL_EDAD + ", " + COL_TELEFONO + ", " + COL_IDCLIENTE + ", " + COL_TIPOMASCOTA + ", " + COL_RAZA + " FROM Mascota WHERE " + COL_ID + " = ?";
         try (PreparedStatement ps = MascotaDbManager.getConnection().prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return new Mascota(
-                        rs.getInt("ID"),
-                        rs.getString("NOMBRE"),
-                        rs.getString("APELLIDO"),
-                        rs.getInt("EDAD"),
-                        rs.getString("TELEFONO"),
-                        rs.getInt("IDCLIENTE"),
-                        rs.getString("TIPOMASCOTA"),
-                        rs.getString("RAZA")
+                        rs.getInt(COL_ID),
+                        rs.getString(COL_NOMBRE),
+                        rs.getString(COL_APELLIDO),
+                        rs.getInt(COL_EDAD),
+                        rs.getString(COL_TELEFONO),
+                        rs.getInt(COL_IDCLIENTE),
+                        rs.getString(COL_TIPOMASCOTA),
+                        rs.getString(COL_RAZA)
                     );
                 }
             }
@@ -78,20 +87,20 @@ public class MascotaRepository {
 
     public List<Mascota> buscarPorNombre(String nombre) {
         List<Mascota> mascotas = new ArrayList<>();
-        String sql = "SELECT * FROM Mascota WHERE NOMBRE LIKE ?";
+        String sql = "SELECT " + COL_ID + ", " + COL_NOMBRE + ", " + COL_APELLIDO + ", " + COL_EDAD + ", " + COL_TELEFONO + ", " + COL_IDCLIENTE + ", " + COL_TIPOMASCOTA + ", " + COL_RAZA + " FROM Mascota WHERE " + COL_NOMBRE + " LIKE ?";
         try (PreparedStatement ps = MascotaDbManager.getConnection().prepareStatement(sql)) {
             ps.setString(1, "%" + nombre + "%");
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Mascota c = new Mascota(
-                        rs.getInt("ID"),
-                        rs.getString("NOMBRE"),
-                        rs.getString("APELLIDO"),
-                        rs.getInt("EDAD"),
-                        rs.getString("TELEFONO"),
-                        rs.getInt("IDCLIENTE"),
-                        rs.getString("TIPOMASCOTA"),
-                        rs.getString("RAZA")
+                        rs.getInt(COL_ID),
+                        rs.getString(COL_NOMBRE),
+                        rs.getString(COL_APELLIDO),
+                        rs.getInt(COL_EDAD),
+                        rs.getString(COL_TELEFONO),
+                        rs.getInt(COL_IDCLIENTE),
+                        rs.getString(COL_TIPOMASCOTA),
+                        rs.getString(COL_RAZA)
                     );
                     mascotas.add(c);
                 }
@@ -104,20 +113,20 @@ public class MascotaRepository {
 
     public List<Mascota> buscarPorCliente(int idCliente) {
         List<Mascota> mascotas = new ArrayList<>();
-        String sql = "SELECT * FROM Mascota WHERE IDCLIENTE = ?";
+        String sql = "SELECT " + COL_ID + ", " + COL_NOMBRE + ", " + COL_APELLIDO + ", " + COL_EDAD + ", " + COL_TELEFONO + ", " + COL_IDCLIENTE + ", " + COL_TIPOMASCOTA + ", " + COL_RAZA + " FROM Mascota WHERE " + COL_IDCLIENTE + " = ?";
         try (PreparedStatement ps = MascotaDbManager.getConnection().prepareStatement(sql)) {
             ps.setInt(1, idCliente);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Mascota c = new Mascota(
-                        rs.getInt("ID"),
-                        rs.getString("NOMBRE"),
-                        rs.getString("APELLIDO"),
-                        rs.getInt("EDAD"),
-                        rs.getString("TELEFONO"),
-                        rs.getInt("IDCLIENTE"),
-                        rs.getString("TIPOMASCOTA"),
-                        rs.getString("RAZA")
+                        rs.getInt(COL_ID),
+                        rs.getString(COL_NOMBRE),
+                        rs.getString(COL_APELLIDO),
+                        rs.getInt(COL_EDAD),
+                        rs.getString(COL_TELEFONO),
+                        rs.getInt(COL_IDCLIENTE),
+                        rs.getString(COL_TIPOMASCOTA),
+                        rs.getString(COL_RAZA)
                     );
                     mascotas.add(c);
                 }
@@ -129,7 +138,7 @@ public class MascotaRepository {
     }
 
     public boolean actualizar(Mascota mascota) {
-        String sql = "UPDATE Mascota SET NOMBRE=?, APELLIDO=?, EDAD=?, TELEFONO=?, IDCLIENTE=?, TIPOMASCOTA=?, RAZA=? WHERE ID=?";
+        String sql = "UPDATE Mascota SET " + COL_NOMBRE + "=?, " + COL_APELLIDO + "=?, " + COL_EDAD + "=?, " + COL_TELEFONO + "=?, " + COL_IDCLIENTE + "=?, " + COL_TIPOMASCOTA + "=?, " + COL_RAZA + "=? WHERE " + COL_ID + "=?";
         try (PreparedStatement ps = MascotaDbManager.getConnection().prepareStatement(sql)) {
             ps.setString(1, mascota.getNombre());
             ps.setString(2, mascota.getApellido());
@@ -152,7 +161,7 @@ public class MascotaRepository {
         if (mascota.getId() == null) {
             mascota.setId(generarNuevoId());
         }
-        String sql = "INSERT INTO Mascota (ID, NOMBRE, APELLIDO, EDAD, TELEFONO, IDCLIENTE, TIPOMASCOTA, RAZA) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Mascota (" + COL_ID + ", " + COL_NOMBRE + ", " + COL_APELLIDO + ", " + COL_EDAD + ", " + COL_TELEFONO + ", " + COL_IDCLIENTE + ", " + COL_TIPOMASCOTA + ", " + COL_RAZA + ") VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = MascotaDbManager.getConnection().prepareStatement(sql)) {
             ps.setInt(1, mascota.getId());
             ps.setString(2, mascota.getNombre());
@@ -169,7 +178,7 @@ public class MascotaRepository {
     }
 
     private int generarNuevoId() {
-        String sql = "SELECT MAX(ID) AS max_id FROM Mascota";
+        String sql = "SELECT MAX(" + COL_ID + ") AS max_id FROM Mascota";
         try (Statement stmt = MascotaDbManager.getConnection().createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             if (rs.next()) {
