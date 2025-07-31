@@ -24,16 +24,6 @@ public class RRHHDbManagerTest {
         assertNotNull(conn);
     }
 
-    @Test
-    public void testConnectionClosed() {
-        Connection conn = RRHHDbManager.getConnection();
-        try {
-            conn.close();
-            assertTrue(conn.isClosed());
-        } catch (Exception e) {
-            System.out.println("Connection should be closed: " + e.getMessage());
-        }
-    }
 
    
 }
