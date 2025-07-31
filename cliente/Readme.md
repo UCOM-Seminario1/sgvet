@@ -1,3 +1,6 @@
+## Modulo de clientes
+- Funcionelidades
+- Consultar Historial
 # Módulo Cliente - SGVET
 
 Este módulo maneja la gestión de clientes en el sistema SGVET.
