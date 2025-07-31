@@ -44,44 +44,44 @@ public class ClienteBusquedaTest {
         
         // 3. Demostrar búsqueda por nombre
         System.out.println("3. BÚSQUEDA POR NOMBRE (ejemplo con 'Juan'):");
-        List<Cliente> clientesPorNombre = controller.buscarClientesPorNombre("Juan");
-        if (clientesPorNombre != null && !clientesPorNombre.isEmpty()) {
-            System.out.println("   Se encontraron " + clientesPorNombre.size() + " cliente(s) con 'Juan' en el nombre:");
-            for (Cliente cliente : clientesPorNombre) {
-                System.out.println("   - " + cliente.getNombre() + " " + cliente.getApellido());
-            }
-        } else {
-            System.out.println("   No se encontraron clientes con 'Juan' en el nombre.");
-        }
+//        List<Cliente> clientesPorNombre = controller.buscarClientesPorNombre("Juan");
+//        if (clientesPorNombre != null && !clientesPorNombre.isEmpty()) {
+//            System.out.println("   Se encontraron " + clientesPorNombre.size() + " cliente(s) con 'Juan' en el nombre:");
+//            for (Cliente cliente : clientesPorNombre) {
+//                System.out.println("   - " + cliente.getNombre() + " " + cliente.getApellido());
+//            }
+//        } else {
+//            System.out.println("   No se encontraron clientes con 'Juan' en el nombre.");
+//        }
         
         System.out.println("\n" + "=".repeat(50) + "\n");
         
         // 4. Demostrar búsqueda por apellido
         System.out.println("4. BÚSQUEDA POR APELLIDO (ejemplo con 'García'):");
-        List<Cliente> clientesPorApellido = controller.buscarClientesPorApellido("García");
-        if (clientesPorApellido != null && !clientesPorApellido.isEmpty()) {
-            System.out.println("   Se encontraron " + clientesPorApellido.size() + " cliente(s) con 'García' en el apellido:");
-            for (Cliente cliente : clientesPorApellido) {
-                System.out.println("   - " + cliente.getNombre() + " " + cliente.getApellido());
-            }
-        } else {
-            System.out.println("   No se encontraron clientes con 'García' en el apellido.");
-        }
+//        List<Cliente> clientesPorApellido = controller.buscarClientesPorApellido("García");
+//        if (clientesPorApellido != null && !clientesPorApellido.isEmpty()) {
+//            System.out.println("   Se encontraron " + clientesPorApellido.size() + " cliente(s) con 'García' en el apellido:");
+//            for (Cliente cliente : clientesPorApellido) {
+//                System.out.println("   - " + cliente.getNombre() + " " + cliente.getApellido());
+//            }
+//        } else {
+//            System.out.println("   No se encontraron clientes con 'García' en el apellido.");
+//        }
         
         System.out.println("\n" + "=".repeat(50) + "\n");
         
         // 5. Demostrar búsqueda general
         System.out.println("5. BÚSQUEDA GENERAL (ejemplo con 'a'):");
-        List<Cliente> clientesGenerales = controller.buscarClientesGeneral("a");
-        if (clientesGenerales != null && !clientesGenerales.isEmpty()) {
-            System.out.println("   Se encontraron " + clientesGenerales.size() + " cliente(s) con 'a' en nombre, apellido o teléfono:");
-            for (Cliente cliente : clientesGenerales) {
-                System.out.println("   - " + cliente.getNombre() + " " + cliente.getApellido() + " (Tel: " + cliente.getTelefono() + ")");
-            }
-        } else {
-            System.out.println("   No se encontraron clientes con 'a' en nombre, apellido o teléfono.");
-        }
-        
+//        List<Cliente> clientesGenerales = controller.buscarClientesGeneral("a");
+//        if (clientesGenerales != null && !clientesGenerales.isEmpty()) {
+//            System.out.println("   Se encontraron " + clientesGenerales.size() + " cliente(s) con 'a' en nombre, apellido o teléfono:");
+//            for (Cliente cliente : clientesGenerales) {
+//                System.out.println("   - " + cliente.getNombre() + " " + cliente.getApellido() + " (Tel: " + cliente.getTelefono() + ")");
+//            }
+//        } else {
+//            System.out.println("   No se encontraron clientes con 'a' en nombre, apellido o teléfono.");
+//        }
+//
         System.out.println("\n" + "=".repeat(50));
         System.out.println("DEMOSTRACIÓN COMPLETADA");
         System.out.println("Para usar la interfaz interactiva, ejecute ClienteUI.java");
