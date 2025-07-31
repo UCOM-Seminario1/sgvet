@@ -1,8 +1,6 @@
 package com.sgvet.mascota.control;
-
 import com.sgvet.mascota.boundary.MascotaRepository;
 import com.sgvet.mascota.entity.Mascota;
-
 import java.util.List;
 
 public class MascotaController {

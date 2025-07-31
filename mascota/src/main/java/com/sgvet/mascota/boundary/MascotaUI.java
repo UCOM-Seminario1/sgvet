@@ -1,8 +1,6 @@
 package com.sgvet.mascota.boundary;
 import com.sgvet.mascota.control.MascotaController;
 import com.sgvet.mascota.entity.Mascota;
-
-import java.lang.ref.Cleaner;
 import java.util.List;
 import java.util.Scanner;
 

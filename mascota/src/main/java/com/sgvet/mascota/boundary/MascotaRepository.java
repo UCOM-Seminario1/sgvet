@@ -3,7 +3,6 @@ package com.sgvet.mascota.boundary;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import com.sgvet.mascota.boundary.MascotaDbManager;
 import com.sgvet.mascota.entity.Mascota;    
 
 public class MascotaRepository {
