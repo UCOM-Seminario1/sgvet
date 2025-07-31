@@ -33,4 +33,19 @@ public class MascotaController {
         return mascotaRepository.eliminarPorId(id);
     }
     
+    public Mascota buscarMascotaPorId(int id) {
+        return mascotaRepository.buscarPorId(id);
+    }
+
+    public List<Mascota> buscarMascotasPorNombre(String nombre) {
+        return mascotaRepository.buscarPorNombre(nombre);
+    }
+
+    public List<Mascota> buscarMascotasPorCliente(int idCliente) {
+        return mascotaRepository.buscarPorCliente(idCliente);
+    }
+
+    public boolean actualizarMascota(Mascota mascota) {
+        return mascotaRepository.actualizar(mascota);
+    }
 }
