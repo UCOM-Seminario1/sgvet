@@ -122,47 +122,70 @@ public class MascotaUI {
         System.out.print("Seleccione una opción (1-3): ");
         int opcion = scanner.hasNextInt() ? scanner.nextInt() : 0;
         scanner.nextLine();
+
         switch (opcion) {
             case 1:
-                System.out.print("Ingrese el ID de la mascota: ");
-                int id = scanner.hasNextInt() ? scanner.nextInt() : 0;
-                scanner.nextLine();
-                Mascota mascota = mascotaController.buscarMascotaPorId(id);
-                if (mascota != null) {
-                    System.out.println("Mascota encontrada: " + mascota.getNombre() + " " + mascota.getApellido() + ", Tipo: " + mascota.getTipoMascota() + ", Raza: " + mascota.getRaza());
-                } else {
-                    System.out.println("No se encontró una mascota con ese ID.");
-                }
+                buscarPorId(scanner);
                 break;
             case 2:
-                System.out.print("Ingrese el nombre (o parte) de la mascota: ");
-                String nombre = scanner.nextLine();
-                List<Mascota> mascotasPorNombre = mascotaController.buscarMascotasPorNombre(nombre);
-                if (!mascotasPorNombre.isEmpty()) {
-                    System.out.println("Mascotas encontradas:");
-                    for (Mascota m : mascotasPorNombre) {
-                        System.out.println("ID: " + m.getId() + ", Nombre: " + m.getNombre() + ", Apellido: " + m.getApellido() + ", Tipo: " + m.getTipoMascota() + ", Raza: " + m.getRaza());
-                    }
-                } else {
-                    System.out.println("No se encontraron mascotas con ese nombre.");
-                }
+                buscarPorNombre(scanner);
                 break;
             case 3:
-                System.out.print("Ingrese el ID del cliente: ");
-                int idCliente = scanner.hasNextInt() ? scanner.nextInt() : 0;
-                scanner.nextLine();
-                List<Mascota> mascotasPorCliente = mascotaController.buscarMascotasPorCliente(idCliente);
-                if (!mascotasPorCliente.isEmpty()) {
-                    System.out.println("Mascotas encontradas para el cliente " + idCliente + ":");
-                    for (Mascota m : mascotasPorCliente) {
-                        System.out.println("ID: " + m.getId() + ", Nombre: " + m.getNombre() + ", Apellido: " + m.getApellido() + ", Tipo: " + m.getTipoMascota() + ", Raza: " + m.getRaza());
-                    }
-                } else {
-                    System.out.println("No se encontraron mascotas para ese cliente.");
-                }
+                buscarPorCliente(scanner);
                 break;
             default:
                 System.out.println("Opción inválida.");
         }
+    }
+
+    private static void buscarPorId(Scanner scanner) {
+        System.out.print("Ingrese el ID de la mascota: ");
+        int id = scanner.hasNextInt() ? scanner.nextInt() : 0;
+        scanner.nextLine();
+        Mascota mascota = mascotaController.buscarMascotaPorId(id);
+        if (mascota != null) {
+            System.out.println("Mascota encontrada: " + formatMascotaInfo(mascota));
+        } else {
+            System.out.println("No se encontró una mascota con ese ID.");
+        }
+    }
+
+    private static void buscarPorNombre(Scanner scanner) {
+        System.out.print("Ingrese el nombre (o parte) de la mascota: ");
+        String nombre = scanner.nextLine();
+        List<Mascota> mascotasPorNombre = mascotaController.buscarMascotasPorNombre(nombre);
+        if (!mascotasPorNombre.isEmpty()) {
+            System.out.println("Mascotas encontradas:");
+            mascotasPorNombre.forEach(m -> System.out.println(formatMascotaDetails(m)));
+        } else {
+            System.out.println("No se encontraron mascotas con ese nombre.");
+        }
+    }
+
+    private static void buscarPorCliente(Scanner scanner) {
+        System.out.print("Ingrese el ID del cliente: ");
+        int idCliente = scanner.hasNextInt() ? scanner.nextInt() : 0;
+        scanner.nextLine();
+        List<Mascota> mascotasPorCliente = mascotaController.buscarMascotasPorCliente(idCliente);
+        if (!mascotasPorCliente.isEmpty()) {
+            System.out.println("Mascotas encontradas para el cliente " + idCliente + ":");
+            mascotasPorCliente.forEach(m -> System.out.println(formatMascotaDetails(m)));
+        } else {
+            System.out.println("No se encontraron mascotas para ese cliente.");
+        }
+    }
+
+    private static String formatMascotaInfo(Mascota mascota) {
+        return mascota.getNombre() + " " + mascota.getApellido() +
+               ", Tipo: " + mascota.getTipoMascota() +
+               ", Raza: " + mascota.getRaza();
+    }
+
+    private static String formatMascotaDetails(Mascota mascota) {
+        return "ID: " + mascota.getId() +
+               ", Nombre: " + mascota.getNombre() +
+               ", Apellido: " + mascota.getApellido() +
+               ", Tipo: " + mascota.getTipoMascota() +
+               ", Raza: " + mascota.getRaza();
     }
 }
