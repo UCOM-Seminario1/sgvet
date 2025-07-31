@@ -27,6 +27,9 @@ pipeline {
                 dir('rrhh') { // Cambia 'base' por el nombre de tu carpeta
                     sh 'mvn clean install'
                 }
+                dir('facturacion') { // Cambia 'base' por el nombre de tu carpeta
+                    sh 'mvn clean install'
+                }
             }
         }
          stage('SonarQube Analysis') {
@@ -58,6 +61,12 @@ pipeline {
                 dir('rrhh') {
                     withSonarQubeEnv("${SONARQUBE_ENV}") {
                         sh 'mvn sonar:sonar -Dsonar.host.url=http://sonarqube:9000 -Dsonar.projectKey=sgVet-RRHH -Dsonar.projectName=SgVet-RRHH'
+                    }
+                }
+
+                dir('facturacion') {
+                    withSonarQubeEnv("${SONARQUBE_ENV}") {
+                        sh 'mvn sonar:sonar -Dsonar.host.url=http://sonarqube:9000 -Dsonar.projectKey=sgVet-Facturacion -Dsonar.projectName=SgVet-Facturacion'
                     }
                 }
             }
