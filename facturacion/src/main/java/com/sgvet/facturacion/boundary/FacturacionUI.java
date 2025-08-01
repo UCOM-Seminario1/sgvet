@@ -40,7 +40,7 @@ public class FacturacionUI {
                         eliminarFacturacion(scanner);
                         break;
                     case 4:
-                        //buscarFacturacion(scanner);
+                        facturacionController.buscarFacturasInteractivo();
                         break;
                     case 0:
                         System.out.println("Volviendo al menu principal...");

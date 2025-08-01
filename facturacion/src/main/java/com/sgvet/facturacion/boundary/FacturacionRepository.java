@@ -4,7 +4,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.sgvet.facturacion.boundary.FacturacionDbManager;
-import com.sgvet.facturacion.entity.Facturacion;    
+import com.sgvet.facturacion.entity.Facturacion;
+import com.sgvet.facturacion.entity.FiltroBusquedaFactura; 
 
 public class FacturacionRepository {
     FacturacionDbManager facturacionDbManager = FacturacionDbManager.getInstance();
@@ -67,5 +68,52 @@ public class FacturacionRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    public List<Facturacion> buscar(FiltroBusquedaFactura filtro) {
+    List<Facturacion> resultados = new ArrayList<>();
+
+    StringBuilder sql = new StringBuilder("SELECT * FROM FACTURA WHERE 1=1");
+    List<Object> parametros = new ArrayList<>();
+
+    if (filtro.getId() != null) {
+        sql.append(" AND ID = ?");
+        parametros.add(filtro.getId());
+    }
+
+    if (filtro.getNombre() != null && !filtro.getNombre().isEmpty()) {
+        sql.append(" AND LOWER(NOMBRE) LIKE ?");
+        parametros.add("%" + filtro.getNombre().toLowerCase() + "%");
+    }
+
+    if (filtro.getRazonSocial() != null && !filtro.getRazonSocial().isEmpty()) {
+        sql.append(" AND LOWER(RAZONSOCIAL) LIKE ?");
+        parametros.add("%" + filtro.getRazonSocial().toLowerCase() + "%");
+    }
+
+    try (PreparedStatement ps = FacturacionDbManager.getConnection().prepareStatement(sql.toString())) {
+        for (int i = 0; i < parametros.size(); i++) {
+            ps.setObject(i + 1, parametros.get(i));
+        }
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Facturacion f = new Facturacion(
+                        rs.getInt("ID"),
+                        rs.getString("NOMBRE"),
+                        rs.getString("RAZONSOCIAL"),
+                        rs.getInt("CANTIDAD"),
+                        rs.getString("IMPORTE"),
+                        rs.getInt("IVA"),
+                        rs.getString("TOTAL"),
+                        rs.getString("DESCRIPCION")
+                );
+                resultados.add(f);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return resultados;
     }
 }
