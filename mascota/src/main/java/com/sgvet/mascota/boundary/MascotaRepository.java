@@ -27,10 +27,6 @@ public class MascotaRepository {
                                              COL_EDAD + ", " + COL_TELEFONO + ", " + COL_IDCLIENTE + ", " +
                                              COL_TIPOMASCOTA + ", " + COL_RAZA;
 
-    // Display constants
-    private static final String TIPO_LABEL = ", Tipo: ";
-    private static final String RAZA_LABEL = ", Raza: ";
-
     public MascotaRepository() {
         // Constructor vacío - La inicialización se realiza a través del MascotaDbManager singleton
         // No se requiere lógica adicional de inicialización en el constructor
@@ -43,7 +39,7 @@ public class MascotaRepository {
             int affected = ps.executeUpdate();
             return affected > 0;
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error al eliminar mascota con ID: " + id, e);
+            logger.log(Level.SEVERE, e, () -> "Error al eliminar mascota con ID: " + id);
             return false;
         }
     }
@@ -60,7 +56,7 @@ public class MascotaRepository {
                 Mascotas.add(c);
             }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error al listar todas las mascotas", e);
+            logger.log(Level.SEVERE, e, () -> "Error al listar todas las mascotas");
         }
 
         return Mascotas;
@@ -76,7 +72,7 @@ public class MascotaRepository {
                 }
             }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error al buscar mascota con ID: " + id, e);
+            logger.log(Level.SEVERE, e, () -> "Error al buscar mascota con ID: " + id);
         }
         return null;
     }
@@ -93,7 +89,7 @@ public class MascotaRepository {
                 }
             }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error al buscar mascotas por nombre: " + nombre, e);
+            logger.log(Level.SEVERE, e, () -> "Error al buscar mascotas por nombre: " + nombre);
         }
         return mascotas;
     }
@@ -110,7 +106,8 @@ public class MascotaRepository {
                 }
             }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error al buscar mascotas por cliente ID: " + idCliente, e);
+            logger.log(Level.SEVERE, e,
+                () -> "Error al buscar mascotas por cliente ID: " + idCliente);
         }
         return mascotas;
     }
@@ -129,7 +126,7 @@ public class MascotaRepository {
             int affected = ps.executeUpdate();
             return affected > 0;
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error al actualizar mascota ID: " + mascota.getId(), e);
+            logger.log(Level.SEVERE, e, () -> "Error al actualizar mascota ID: " + mascota.getId());
             return false;
         }
     }
@@ -151,7 +148,7 @@ public class MascotaRepository {
             ps.setString(8, mascota.getRaza());
             ps.executeUpdate();
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error al insertar mascota: " + mascota.getNombre(), e);
+            logger.log(Level.SEVERE, e, () -> "Error al insertar mascota: " + mascota.getNombre());
         }
     }
 
@@ -163,7 +160,7 @@ public class MascotaRepository {
                 return rs.getInt("max_id") + 1;
             }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error al generar nuevo ID", e);
+            logger.log(Level.SEVERE, e, () -> "Error al generar nuevo ID");
         }
         return 1; // Si no hay registros, empezar en 1
     }
