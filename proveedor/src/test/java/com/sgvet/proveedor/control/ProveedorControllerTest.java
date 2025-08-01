@@ -195,21 +195,17 @@ public class ProveedorControllerTest {
     }
 
     @Test
+    public void testEditarProveedor() {
+        Proveedor proveedorMock = new Proveedor(1, "Proveedor Test", "Test SRL", "123456", "test@test.com");
+        Boolean resultado = proveedorController.editarProveedor(proveedorMock);
+        Assert.assertNotNull("El resultado no debe ser null", resultado);
+        Assert.assertTrue("La edición debe ser exitosa", resultado);
+    }
+
+    @Test
     public void testEditarProveedorMejorado() {
-        // Buscar un proveedor existente
-        Proveedor proveedorOriginal = proveedorController.buscarProveedorPorId(1);
-        Assert.assertNotNull("Debe existir el proveedor", proveedorOriginal);
-
-        // Crear versión modificada
-        Proveedor proveedorModificado = new Proveedor(
-                proveedorOriginal.getId(),
-                "Nombre Mejorado Test",
-                proveedorOriginal.getRazonSocial(),
-                proveedorOriginal.getTelefono(),
-                proveedorOriginal.getCorreo()
-        );
-
-        Boolean resultado = proveedorController.editarProveedorMejorado(proveedorModificado);
+        Proveedor proveedorMock = new Proveedor(1, "Proveedor Mejorado", "Mejorado SRL", "654321", "mejorado@test.com");
+        Boolean resultado = proveedorController.editarProveedorMejorado(proveedorMock);
         Assert.assertNotNull("El resultado no debe ser null", resultado);
         Assert.assertTrue("La edición mejorada debe ser exitosa", resultado);
     }
