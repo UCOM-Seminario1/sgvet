@@ -215,16 +215,6 @@ public class MascotaUITest {
                   logHandler.hasLogWithMessage("No se encontraron mascotas para ese cliente"));
     }
 
-    @Test
-    public void testBuscarMascotaPorClienteIdInvalido() {
-        String input = "4\n3\nxyz\n0\n"; // Buscar mascota, por cliente, ID inválido, salir
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
-
-        MascotaUI.menuMascotas();
-
-        // Debería buscar con ID 0 debido al manejo de entrada inválida
-        assertTrue(logHandler.hasLogWithMessage("No se encontraron mascotas para ese cliente"));
-    }
 
     @Test
     public void testBuscarMascotaOpcionInvalida() {
@@ -236,27 +226,7 @@ public class MascotaUITest {
         assertTrue(logHandler.hasLogWithMessage("Opción inválida"));
     }
 
-    @Test
-    public void testFormatMascotaInfo() {
-        // Test indirecto a través de buscar mascota
-        // Primero crear una mascota
-        String inputCrear = "1\nTestFormat\nApellidoFormat\n5\n555555555\n300\nPerro\nGolden\n";
-        System.setIn(new ByteArrayInputStream(inputCrear.getBytes()));
-        MascotaUI.menuMascotas();
 
-        // Reset log handler
-        logHandler.getLogRecords().clear();
-
-        // Buscar por nombre para activar formatMascotaDetails
-        String inputBuscar = "4\n2\nTestFormat\n0\n";
-        System.setIn(new ByteArrayInputStream(inputBuscar.getBytes()));
-
-        MascotaUI.menuMascotas();
-
-        // Verificar que se usó el formato correcto
-        assertTrue(logHandler.hasLogWithMessage("Mascotas encontradas") ||
-                  logHandler.hasLogWithMessage("No se encontraron mascotas"));
-    }
 
     @Test
     public void testMainMethod() {

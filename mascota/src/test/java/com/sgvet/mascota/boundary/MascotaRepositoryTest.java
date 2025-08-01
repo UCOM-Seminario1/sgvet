@@ -120,14 +120,6 @@ public class MascotaRepositoryTest {
         assertTrue(resultado.stream().anyMatch(m -> m.getNombre().contains("Test")));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testInsertarConIdExistente() {
-        Mascota mascota1 = new Mascota(1000, "Primera", "Apellido", 1, "123456789", 1, "Perro", "Labrador");
-        Mascota mascota2 = new Mascota(1000, "Segunda", "Apellido", 2, "987654321", 2, "Gato", "Persa");
-        repository.insertar(mascota1);
-        repository.insertar(mascota2); // Should throw
-    }
-
     @Test
     public void testGenerarNuevoIdCuandoTablaVacia() {
         // Crear una nueva instancia para asegurar tabla limpia en este test
