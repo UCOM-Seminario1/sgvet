@@ -1,11 +1,12 @@
 package com.sgvet.proveedor.control;
 
-import com.sgvet.proveedor.entity.Proveedor;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.util.List;
+import com.sgvet.proveedor.entity.Proveedor;
 
 public class ProveedorControllerTest {
 
@@ -191,5 +192,25 @@ public class ProveedorControllerTest {
         Assert.assertNotNull("El proveedor registrado no debe ser null", resultado);
         Assert.assertEquals("Los IDs deben coincidir", nuevoProveedor.getId(), resultado.getId());
         Assert.assertEquals("Los nombres deben coincidir", nuevoProveedor.getNombre(), resultado.getNombre());
+    }
+
+    @Test
+    public void testEditarProveedorMejorado() {
+        // Buscar un proveedor existente
+        Proveedor proveedorOriginal = proveedorController.buscarProveedorPorId(1);
+        Assert.assertNotNull("Debe existir el proveedor", proveedorOriginal);
+
+        // Crear versión modificada
+        Proveedor proveedorModificado = new Proveedor(
+                proveedorOriginal.getId(),
+                "Nombre Mejorado Test",
+                proveedorOriginal.getRazonSocial(),
+                proveedorOriginal.getTelefono(),
+                proveedorOriginal.getCorreo()
+        );
+
+        Boolean resultado = proveedorController.editarProveedorMejorado(proveedorModificado);
+        Assert.assertNotNull("El resultado no debe ser null", resultado);
+        Assert.assertTrue("La edición mejorada debe ser exitosa", resultado);
     }
 }
