@@ -5,9 +5,9 @@ import com.sgvet.cliente.entity.Cliente;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 import java.util.List;
+
+import static org.junit.Assert.*;
 
 public class ClienteControllerTest {
 
@@ -25,7 +25,7 @@ public class ClienteControllerTest {
         clienteInvalido = new Cliente(null, null, null, null, null);
     }
 
-    // ========== TESTS DE CREAR CLIENTE (de la rama izquierda) ==========
+    // ====== TESTS DE CREAR CLIENTE ======
 
     @Test
     public void testCrearCliente_HappyPath_ClienteValido() {
@@ -117,7 +117,7 @@ public class ClienteControllerTest {
         assertNotNull("El resultado no debería ser null", resultado);
     }
 
-    // ========== TESTS DE LISTAR CLIENTES (izquierda y derecha combinados) ==========
+    // ====== TESTS DE LISTAR CLIENTES ======
 
     @Test
     public void testListarClientes_HappyPath_ListaVacia() {
@@ -141,47 +141,7 @@ public class ClienteControllerTest {
         assertTrue("Debería retornar una lista", clientes instanceof List);
     }
 
-    // ========== PRUEBAS AGREGADAS DE LA RAMA DERECHA ==========
-
-    @Test
-    public void modificarCliente_HappyPath_ClienteExiste() {
-        Cliente cliente = new Cliente(1, "Juan", "Pérez", 30, "123456789");
-        Boolean resultado = clienteController.modificarCliente(cliente);
-        assertNotNull("El resultado no debería ser null", resultado);
-    }
-
-    @Test
-    public void modificarCliente_UnhappyPath_ClienteNull() {
-        Boolean resultado = clienteController.modificarCliente(null);
-        assertNotNull("El resultado no debería ser null", resultado);
-    }
-
-    @Test
-    public void buscarClientePorId_HappyPath_ClienteExiste() {
-        Cliente resultado = clienteController.buscarClientePorId(1);
-        // No hay asserts específicos, solo que no falle el método
-    }
-
-    @Test
-    public void buscarClientePorId_UnhappyPath_IdInvalido() {
-        Cliente resultado = clienteController.buscarClientePorId(-1);
-        // No hay asserts específicos, solo que no falle el método
-    }
-
-    @Test
-    public void crearCliente_HappyPath_ClienteValido_Derecha() {
-        Cliente cliente = new Cliente(999, "Nuevo", "Cliente", 25, "987654321");
-        Boolean resultado = clienteController.crearCliente(cliente);
-        assertNotNull("El resultado no debería ser null", resultado);
-    }
-
-    @Test
-    public void listarClientes_HappyPath_RetornaLista_Derecha() {
-        var resultado = clienteController.listarClientes();
-        assertNotNull("La lista no debería ser null", resultado);
-    }
-
-    // ========== TESTS DE ELIMINAR CLIENTE (de la rama derecha) ==========
+    // ====== TESTS DE ELIMINAR CLIENTE ======
 
     @Test
     public void testEliminarClienteExitoso() {
@@ -210,7 +170,20 @@ public class ClienteControllerTest {
         assertFalse("Debería retornar false cuando el ID es null", resultado);
     }
 
-    // ========== TEST DE MODIFICAR CLIENTE (de la rama derecha) ==========
+    // ====== TESTS DE MODIFICAR CLIENTE ======
+
+    @Test
+    public void modificarCliente_HappyPath_ClienteExiste() {
+        Cliente cliente = new Cliente(1, "Juan", "Pérez", 30, "123456789");
+        Boolean resultado = clienteController.modificarCliente(cliente);
+        assertNotNull("El resultado no debería ser null", resultado);
+    }
+
+    @Test
+    public void modificarCliente_UnhappyPath_ClienteNull() {
+        Boolean resultado = clienteController.modificarCliente(null);
+        assertNotNull("El resultado no debería ser null", resultado);
+    }
 
     @Test
     public void testModificarCliente() {
@@ -228,7 +201,19 @@ public class ClienteControllerTest {
         clienteRepository.eliminarCliente(666);
     }
 
-    // ========== TEST DE BUSCAR CLIENTE POR ID (de la rama derecha) ==========
+    // ====== TESTS DE BUSCAR CLIENTE POR ID ======
+
+    @Test
+    public void buscarClientePorId_HappyPath_ClienteExiste() {
+        Cliente resultado = clienteController.buscarClientePorId(1);
+        // No hay asserts específicos, solo que no falle el método
+    }
+
+    @Test
+    public void buscarClientePorId_UnhappyPath_IdInvalido() {
+        Cliente resultado = clienteController.buscarClientePorId(-1);
+        // No hay asserts específicos, solo que no falle el método
+    }
 
     @Test
     public void testBuscarClientePorId() {
@@ -239,5 +224,122 @@ public class ClienteControllerTest {
         assertEquals("Test", clienteEncontrado.getNombre());
         assertEquals("Buscar", clienteEncontrado.getApellido());
         clienteRepository.eliminarCliente(777);
+    }
+
+    @Test
+    public void buscarClientePorId_NotFound() {
+        Cliente result = clienteController.buscarClientePorId(999);
+        assertNull(result);
+    }
+
+    @Test
+    public void buscarClientePorId_ZeroId() {
+        Cliente result = clienteController.buscarClientePorId(0);
+        assertNull(result);
+    }
+
+    @Test
+    public void buscarClientePorId_NegativeId() {
+        Cliente result = clienteController.buscarClientePorId(-1);
+        assertNull(result);
+    }
+
+    // ====== TESTS DE BUSCAR CLIENTES POR ATRIBUTOS ======
+
+    @Test
+    public void buscarClientesPorNombre_EmptyString() {
+        List<Cliente> result = clienteController.buscarClientesPorNombre("");
+        assertNotNull(result);
+    }
+
+    @Test
+    public void buscarClientesPorNombre_NullString() {
+        List<Cliente> result = clienteController.buscarClientesPorNombre(null);
+        assertTrue(result == null || result.isEmpty());
+    }
+
+    @Test
+    public void buscarClientesPorApellido_EmptyString() {
+        List<Cliente> result = clienteController.buscarClientesPorApellido("");
+        assertNotNull(result);
+    }
+
+    @Test
+    public void buscarClientesPorApellido_NullString() {
+        List<Cliente> result = clienteController.buscarClientesPorApellido(null);
+        assertTrue(result == null || result.isEmpty());
+    }
+
+    @Test
+    public void buscarClientesPorTelefono_EmptyString() {
+        List<Cliente> result = clienteController.buscarClientesPorTelefono("");
+        assertNotNull(result);
+    }
+
+    @Test
+    public void buscarClientesPorTelefono_NullString() {
+        List<Cliente> result = clienteController.buscarClientesPorTelefono(null);
+        assertTrue(result == null || result.isEmpty());
+    }
+
+    // ====== TESTS DE BUSCAR CLIENTES GENERAL ======
+
+    @Test
+    public void testBuscarClientesGeneral_WithValidString() {
+        List<Cliente> result = clienteController.buscarClientesGeneral("test");
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testBuscarClientesGeneral_WithEmptyString() {
+        List<Cliente> result = clienteController.buscarClientesGeneral("");
+        assertNotNull(result);
+    }
+
+    @Test
+    public void testBuscarClientesGeneral_WithNullString() {
+        List<Cliente> result = clienteController.buscarClientesGeneral(null);
+        assertTrue(result == null || result.isEmpty());
+    }
+
+    // ====== TESTS DE VALIDACION DE DATOS CLIENTE (Entity) ======
+
+    @Test
+    public void testClienteEntity_ValidData() {
+        Cliente cliente = new Cliente(3, "Juan", "Pérez", 30, "123456789");
+
+        assertEquals(Integer.valueOf(3), cliente.getId());
+        assertEquals("Juan", cliente.getNombre());
+        assertEquals("Pérez", cliente.getApellido());
+        assertEquals(Integer.valueOf(30), cliente.getEdad());
+        assertEquals("123456789", cliente.getTelefono());
+    }
+
+    @Test
+    public void testClienteEntity_SettersAndGetters() {
+        Cliente cliente = new Cliente();
+
+        cliente.setId(4);
+        cliente.setNombre("María");
+        cliente.setApellido("García");
+        cliente.setEdad(25);
+        cliente.setTelefono("987654321");
+
+        assertEquals(Integer.valueOf(4), cliente.getId());
+        assertEquals("María", cliente.getNombre());
+        assertEquals("García", cliente.getApellido());
+        assertEquals(Integer.valueOf(25), cliente.getEdad());
+        assertEquals("987654321", cliente.getTelefono());
+    }
+
+    @Test
+    public void testClienteEntity_ToString() {
+        Cliente cliente = new Cliente(5, "Carlos", "López", 35, "555555555");
+
+        String result = cliente.toString();
+
+        assertNotNull(result);
+        assertTrue(result.contains("Carlos"));
+        assertTrue(result.contains("López"));
     }
 }
