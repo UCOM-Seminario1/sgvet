@@ -1,10 +1,14 @@
 package com.sgvet.mascota.control;
+
 import com.sgvet.mascota.boundary.MascotaRepository;
 import com.sgvet.mascota.entity.Mascota;
 import java.util.List;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 public class MascotaController {
 
+    private static final Logger logger = Logger.getLogger(MascotaController.class.getName());
     private MascotaRepository mascotaRepository = new MascotaRepository();
     // Aquí puedes agregar métodos para manejar las solicitudes relacionadas con los Mascotas
     // Por ejemplo, crear, actualizar, eliminar y listar Mascotas
@@ -12,12 +16,11 @@ public class MascotaController {
     public Boolean crearMascota(Mascota Mascota) {
         // Lógica para crear un Mascota
         try{
-
             mascotaRepository.insertar(Mascota);
             return true;
         } 
         catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error al crear mascota: " + Mascota.getNombre(), e);
             return false;
         }
     }

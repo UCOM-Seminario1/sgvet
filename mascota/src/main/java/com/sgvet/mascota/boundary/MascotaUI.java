@@ -1,12 +1,17 @@
 package com.sgvet.mascota.boundary;
 import com.sgvet.mascota.control.MascotaController;
 import com.sgvet.mascota.entity.Mascota;
+
+import java.lang.ref.Cleaner;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Logger;
 
 public class MascotaUI {
 
+    private static final Logger logger = Logger.getLogger(MascotaUI.class.getName());
     static MascotaController mascotaController = new MascotaController();
+
     public static void main(String[] args) {
         menuMascotas();
     }
@@ -16,13 +21,13 @@ public class MascotaUI {
         int opcion = -1;
 
         while (opcion != 0) {
-            System.out.println("\n--- Menu de Mascotas ---");
-            System.out.println("1. Crear mascota");
-            System.out.println("2. Listar Mascotas");
-            System.out.println("3. Eliminar mascota");
-            System.out.println("4. Buscar mascota");
-            System.out.println("0. Volver al menu principal");
-            System.out.print("Seleccione una opcion (0-4): ");
+            logger.info("\n--- Menu de Mascotas ---");
+            logger.info("1. Crear mascota");
+            logger.info("2. Listar Mascotas");
+            logger.info("3. Eliminar mascota");
+            logger.info("4. Buscar mascota");
+            logger.info("0. Volver al menu principal");
+            logger.info("Seleccione una opcion (0-4): ");
 
             if (scanner.hasNextInt()) {
                 opcion = scanner.nextInt();
@@ -41,13 +46,13 @@ public class MascotaUI {
                         buscarMascota(scanner);
                         break;
                     case 0:
-                        System.out.println("Volviendo al menu principal...");
+                        logger.info("Volviendo al menu principal...");
                         break;
                     default:
-                        System.out.println("Opcion invalida. Intente de nuevo.");
+                        logger.warning("Opcion invalida. Intente de nuevo.");
                 }
             } else {
-                System.out.println("Por favor, ingrese un numero valido.");
+                logger.warning("Por favor, ingrese un numero valido.");
                 scanner.next();
             }
         }
@@ -55,69 +60,69 @@ public class MascotaUI {
     }
 
     private static void crearMascota(Scanner scanner) {
-        System.out.println("Ingrese los datos de la mascota:");
-        System.out.print("Nombre: ");
+        logger.info("Ingrese los datos de la mascota:");
+        logger.info("Nombre: ");
         String nombre = scanner.nextLine();
-        System.out.print("Apellido: ");
+        logger.info("Apellido: ");
         String apellido = scanner.nextLine();
-        System.out.print("Edad: ");
+        logger.info("Edad: ");
         int edad = scanner.hasNextInt() ? scanner.nextInt() : 0;
         scanner.nextLine();
-        System.out.print("Telefono: ");
+        logger.info("Telefono: ");
         String telefono = scanner.nextLine();
-        System.out.print("ID Cliente: ");
+        logger.info("ID Cliente: ");
         int idCliente = scanner.hasNextInt() ? scanner.nextInt() : 0;
         scanner.nextLine();
-        System.out.print("Tipo de Mascota: ");
+        logger.info("Tipo de Mascota: ");
         String tipoMascota = scanner.nextLine();
-        System.out.print("Raza: ");
+        logger.info("Raza: ");
         String raza = scanner.nextLine();
 
         Mascota mascota = new Mascota(null, nombre, apellido, edad, telefono, idCliente, tipoMascota, raza);
         boolean creada = mascotaController.crearMascota(mascota);
         if (creada) {
-            System.out.println("Mascota creada exitosamente. ID asignado: " + mascota.getId());
+            logger.info("Mascota creada exitosamente. ID asignado: " + mascota.getId());
         } else {
-            System.out.println("Error al crear la mascota.");
+            logger.severe("Error al crear la mascota.");
         }
     }
 
     private static void listarMascotas() {
-        System.out.println("Funcionalidad para listar Mascotas (pendiente de implementar).");
+        logger.info("Funcionalidad para listar Mascotas (pendiente de implementar).");
         List<Mascota> listaMascotas=  mascotaController.listarMascotas();
         for (Mascota mascota: listaMascotas){
-            System.out.println("Nombre:" + mascota.getNombre());
-            System.out.println("Apellido:" + mascota.getApellido());
-            System.out.println("Telefono:" + mascota.getTelefono());
-            System.out.println("Edad:" + mascota.getEdad());
-            System.out.println("Id:" + mascota.getId());
+            logger.info("Nombre:" + mascota.getNombre());
+            logger.info("Apellido:" + mascota.getApellido());
+            logger.info("Telefono:" + mascota.getTelefono());
+            logger.info("Edad:" + mascota.getEdad());
+            logger.info("Id:" + mascota.getId());
 
         }
     }
 
     private static void eliminarMascota(Scanner scanner) {
-        System.out.print("Ingrese el ID de la mascota a eliminar: ");
+        logger.info("Ingrese el ID de la mascota a eliminar: ");
         if (scanner.hasNextInt()) {
             int id = scanner.nextInt();
             scanner.nextLine(); // Clean buffer
             boolean eliminado = mascotaController.eliminarMascota(id);
             if (eliminado) {
-                System.out.println("Mascota eliminada exitosamente.");
+                logger.info("Mascota eliminada exitosamente.");
             } else {
-                System.out.println("No se encontró una mascota con ese ID.");
+                logger.warning("No se encontró una mascota con ese ID.");
             }
         } else {
-            System.out.println("ID inválido.");
+            logger.warning("ID inválido.");
             scanner.next(); // Clean invalid input
         }
     }
 
     private static void buscarMascota(Scanner scanner) {
-        System.out.println("Buscar mascota por:");
-        System.out.println("1. ID");
-        System.out.println("2. Nombre");
-        System.out.println("3. ID Cliente");
-        System.out.print("Seleccione una opción (1-3): ");
+        logger.info("Buscar mascota por:");
+        logger.info("1. ID");
+        logger.info("2. Nombre");
+        logger.info("3. ID Cliente");
+        logger.info("Seleccione una opción (1-3): ");
         int opcion = scanner.hasNextInt() ? scanner.nextInt() : 0;
         scanner.nextLine();
 
@@ -132,44 +137,44 @@ public class MascotaUI {
                 buscarPorCliente(scanner);
                 break;
             default:
-                System.out.println("Opción inválida.");
+                logger.warning("Opción inválida.");
         }
     }
 
     private static void buscarPorId(Scanner scanner) {
-        System.out.print("Ingrese el ID de la mascota: ");
+        logger.info("Ingrese el ID de la mascota: ");
         int id = scanner.hasNextInt() ? scanner.nextInt() : 0;
         scanner.nextLine();
         Mascota mascota = mascotaController.buscarMascotaPorId(id);
         if (mascota != null) {
-            System.out.println("Mascota encontrada: " + formatMascotaInfo(mascota));
+            logger.info("Mascota encontrada: " + formatMascotaInfo(mascota));
         } else {
-            System.out.println("No se encontró una mascota con ese ID.");
+            logger.warning("No se encontró una mascota con ese ID.");
         }
     }
 
     private static void buscarPorNombre(Scanner scanner) {
-        System.out.print("Ingrese el nombre (o parte) de la mascota: ");
+        logger.info("Ingrese el nombre (o parte) de la mascota: ");
         String nombre = scanner.nextLine();
         List<Mascota> mascotasPorNombre = mascotaController.buscarMascotasPorNombre(nombre);
         if (!mascotasPorNombre.isEmpty()) {
-            System.out.println("Mascotas encontradas:");
-            mascotasPorNombre.forEach(m -> System.out.println(formatMascotaDetails(m)));
+            logger.info("Mascotas encontradas:");
+            mascotasPorNombre.forEach(m -> logger.info(formatMascotaDetails(m)));
         } else {
-            System.out.println("No se encontraron mascotas con ese nombre.");
+            logger.warning("No se encontraron mascotas con ese nombre.");
         }
     }
 
     private static void buscarPorCliente(Scanner scanner) {
-        System.out.print("Ingrese el ID del cliente: ");
+        logger.info("Ingrese el ID del cliente: ");
         int idCliente = scanner.hasNextInt() ? scanner.nextInt() : 0;
         scanner.nextLine();
         List<Mascota> mascotasPorCliente = mascotaController.buscarMascotasPorCliente(idCliente);
         if (!mascotasPorCliente.isEmpty()) {
-            System.out.println("Mascotas encontradas para el cliente " + idCliente + ":");
-            mascotasPorCliente.forEach(m -> System.out.println(formatMascotaDetails(m)));
+            logger.info("Mascotas encontradas para el cliente " + idCliente + ":");
+            mascotasPorCliente.forEach(m -> logger.info(formatMascotaDetails(m)));
         } else {
-            System.out.println("No se encontraron mascotas para ese cliente.");
+            logger.warning("No se encontraron mascotas para ese cliente.");
         }
     }
 

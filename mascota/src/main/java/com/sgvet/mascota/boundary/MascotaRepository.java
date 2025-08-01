@@ -3,9 +3,12 @@ package com.sgvet.mascota.boundary;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import com.sgvet.mascota.entity.Mascota;    
+import java.util.logging.Logger;
+import java.util.logging.Level;
+import com.sgvet.mascota.entity.Mascota;
 
 public class MascotaRepository {
+    private static final Logger logger = Logger.getLogger(MascotaRepository.class.getName());
     MascotaDbManager mascotaDbManager = MascotaDbManager.getInstance();
 
     private static final String COL_ID = "ID";
@@ -29,6 +32,8 @@ public class MascotaRepository {
     private static final String RAZA_LABEL = ", Raza: ";
 
     public MascotaRepository() {
+        // Constructor vacío - La inicialización se realiza a través del MascotaDbManager singleton
+        // No se requiere lógica adicional de inicialización en el constructor
     }
 
     public boolean eliminarPorId(int id) {
@@ -38,11 +43,10 @@ public class MascotaRepository {
             int affected = ps.executeUpdate();
             return affected > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error al eliminar mascota con ID: " + id, e);
             return false;
         }
     }
-
 
     public List<Mascota> listarTodos() {
         List<Mascota> Mascotas = new ArrayList<>();
@@ -56,7 +60,7 @@ public class MascotaRepository {
                 Mascotas.add(c);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error al listar todas las mascotas", e);
         }
 
         return Mascotas;
@@ -72,7 +76,7 @@ public class MascotaRepository {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error al buscar mascota con ID: " + id, e);
         }
         return null;
     }
@@ -89,7 +93,7 @@ public class MascotaRepository {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error al buscar mascotas por nombre: " + nombre, e);
         }
         return mascotas;
     }
@@ -106,7 +110,7 @@ public class MascotaRepository {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error al buscar mascotas por cliente ID: " + idCliente, e);
         }
         return mascotas;
     }
@@ -125,7 +129,7 @@ public class MascotaRepository {
             int affected = ps.executeUpdate();
             return affected > 0;
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error al actualizar mascota ID: " + mascota.getId(), e);
             return false;
         }
     }
@@ -147,7 +151,7 @@ public class MascotaRepository {
             ps.setString(8, mascota.getRaza());
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error al insertar mascota: " + mascota.getNombre(), e);
         }
     }
 
@@ -159,7 +163,7 @@ public class MascotaRepository {
                 return rs.getInt("max_id") + 1;
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Error al generar nuevo ID", e);
         }
         return 1; // Si no hay registros, empezar en 1
     }
