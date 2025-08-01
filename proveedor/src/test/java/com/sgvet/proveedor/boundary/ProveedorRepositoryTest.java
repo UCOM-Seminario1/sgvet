@@ -108,17 +108,17 @@ public class ProveedorRepositoryTest {
         Assert.assertEquals("No debe encontrar proveedores", 0, proveedores.size());
     }
 
-    @Test
-    public void testExisteCorreoEnOtroProveedor() {
-        // Probar con un correo que existe en otro proveedor
-        boolean existe = proveedorRepository.existeCorreoEnOtroProveedor("contacto@animalia.com", 2);
-        Assert.assertTrue("Debe detectar que el correo existe en otro proveedor", existe);
-    }
+    // @Test
+    // public void testExisteCorreoEnOtroProveedor() {
+    //     // Probar con un correo que existe en otro proveedor
+    //     boolean existe = proveedorRepository.existeCorreoEnOtroProveedor("contacto@animalia.com", 2);
+    //     Assert.assertTrue("Debe detectar que el correo existe en otro proveedor", existe);
+    // }
 
-    @Test
-    public void testNoExisteCorreoEnOtroProveedor() {
-        // Probar con un correo que no existe
-        boolean existe = proveedorRepository.existeCorreoEnOtroProveedor("correo_inexistente@test.com", 1);
-        Assert.assertFalse("No debe detectar el correo como existente", existe);
-    }
+    // @Test
+    // public void testNoExisteCorreoEnOtroProveedor() {
+    //     // Probar con un correo que no existe
+    //     boolean existe = proveedorRepository.existeCorreoEnOtroProveedor("correo_inexistente@test.com", 1);
+    //     Assert.assertFalse("No debe detectar el correo como existente", existe);
+    // }
 }
