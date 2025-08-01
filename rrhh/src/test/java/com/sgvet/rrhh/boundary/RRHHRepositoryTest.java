@@ -279,6 +279,64 @@ class RRHHRepositoryTest {
             // Assert
             assertFalse(resultado, "Debería retornar false cuando ID es cero");
         }
+
+        @Test
+        @DisplayName("Debería eliminar múltiples RRHH y verificar que solo se elimina el especificado")
+        void deberiaEliminarMultiplesRRHHYVerificarQueSoloSeEliminaElEspecificado() {
+            // Arrange
+            RRHH rrhh1 = new RRHH(1, "Juan", "Pérez", "12345678", "555-1234", 
+                                 "juan.perez@email.com", "Veterinario", "Cirugía");
+            RRHH rrhh2 = new RRHH(2, "María", "García", "87654321", "555-5678", 
+                                 "maria.garcia@email.com", "Asistente", "Clínica");
+            RRHH rrhh3 = new RRHH(3, "Carlos", "López", "11223344", "555-9999", 
+                                 "carlos.lopez@email.com", "Veterinario", "Clínica");
+            
+            repository.insertar(rrhh1);
+            repository.insertar(rrhh2);
+            repository.insertar(rrhh3);
+
+            // Verificar que existen los 3 RRHH
+            assertEquals(3, repository.contarRegistros(), "Deberían existir 3 RRHH antes de eliminar");
+
+            // Act - eliminar solo el RRHH con ID 2
+            boolean resultado = repository.eliminarPorId(2);
+
+            // Assert
+            assertTrue(resultado, "Debería eliminar exitosamente el RRHH con ID 2");
+            
+            // Verificar que solo se eliminó el RRHH con ID 2
+            assertNull(repository.buscarPorId(2), "No debería encontrar el RRHH eliminado (ID 2)");
+            assertNotNull(repository.buscarPorId(1), "Debería encontrar el RRHH con ID 1");
+            assertNotNull(repository.buscarPorId(3), "Debería encontrar el RRHH con ID 3");
+            assertEquals(2, repository.contarRegistros(), "Deberían quedar 2 RRHH después de eliminar");
+        }
+
+        @Test
+        @DisplayName("Debería manejar correctamente intentos de eliminación consecutivos del mismo ID")
+        void deberiaManejarCorrectamenteIntentosDeEliminacionConsecutivosDelMismoID() {
+            // Arrange
+            RRHH rrhh = new RRHH(1, "Juan", "Pérez", "12345678", "555-1234", 
+                                "juan.perez@email.com", "Veterinario", "Cirugía");
+            repository.insertar(rrhh);
+
+            // Act - primera eliminación (debería ser exitosa)
+            boolean resultado1 = repository.eliminarPorId(1);
+            
+            // Act - segunda eliminación del mismo ID (debería fallar)
+            boolean resultado2 = repository.eliminarPorId(1);
+            
+            // Act - tercera eliminación del mismo ID (debería fallar)
+            boolean resultado3 = repository.eliminarPorId(1);
+
+            // Assert
+            assertTrue(resultado1, "Primera eliminación debería ser exitosa");
+            assertFalse(resultado2, "Segunda eliminación del mismo ID debería fallar");
+            assertFalse(resultado3, "Tercera eliminación del mismo ID debería fallar");
+            
+            // Verificar que el RRHH ya no existe
+            assertNull(repository.buscarPorId(1), "No debería encontrar el RRHH eliminado");
+            assertEquals(0, repository.contarRegistros(), "No debería quedar ningún RRHH");
+        }
     }
 
     @Nested
