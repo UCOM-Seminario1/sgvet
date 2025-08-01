@@ -20,7 +20,9 @@ public class MascotaController {
             return true;
         } 
         catch (Exception e) {
-            logger.log(Level.SEVERE, () -> "Error al crear mascota: " + Mascota.getNombre(), e);
+            if (logger.isLoggable(Level.SEVERE)) {
+                logger.log(Level.SEVERE, "Error al crear mascota: " + Mascota.getNombre(), e);
+            }
             return false;
         }
     }
