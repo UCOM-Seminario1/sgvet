@@ -1,18 +1,25 @@
-package com.sgvet.mascota.boundary;
+package com.sgvet.facturacion.boundary;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.file.Paths;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import com.sgvet.base.boundary.BaseDbManager;
 
-public class MascotaDbManager {
+public class FacturacionDbManager {
 
 
     private static BaseDbManager base = BaseDbManager.getInstance();
-    private static MascotaDbManager instance;
-    private static final String INIT_SQL_RESOURCE = "db/initMascotas.sql";
-    protected MascotaDbManager() {
+    private static FacturacionDbManager instance;
+    private static final String INIT_SQL_RESOURCE = "db/initFacturacion.sql";
+    protected FacturacionDbManager() {
         try {
-            System.out.println("Inicializando base Mascotas desde: " + INIT_SQL_RESOURCE);
+            System.out.println("Inicializando base Facturacions desde: " + INIT_SQL_RESOURCE);
             base.runSqlScriptFromResources(INIT_SQL_RESOURCE);
         } catch (SQLException | IOException e) {
             throw new RuntimeException("Error inicializando la base", e);
@@ -20,9 +27,9 @@ public class MascotaDbManager {
     }
 
 
-    public static MascotaDbManager getInstance() {
+    public static FacturacionDbManager getInstance() {
         if (instance == null) {
-            instance = new MascotaDbManager(); // Sin script de inicialización
+            instance = new FacturacionDbManager(); // Sin script de inicialización
         }
         return instance;
     }
