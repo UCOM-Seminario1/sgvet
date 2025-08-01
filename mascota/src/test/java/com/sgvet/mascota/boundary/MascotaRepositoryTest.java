@@ -120,16 +120,12 @@ public class MascotaRepositoryTest {
         assertTrue(resultado.stream().anyMatch(m -> m.getNombre().contains("Test")));
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testInsertarConIdExistente() {
-        Mascota mascota1 = new Mascota(1000, "Primera", "Apellido", 1, "111111111", 15, "Perro", "Raza1");
-        Mascota mascota2 = new Mascota(1000, "Segunda", "Apellido", 2, "222222222", 16, "Gato", "Raza2");
+        Mascota mascota1 = new Mascota(1000, "Primera", "Apellido", 1, "123456789", 1, "Perro", "Labrador");
+        Mascota mascota2 = new Mascota(1000, "Segunda", "Apellido", 2, "987654321", 2, "Gato", "Persa");
         repository.insertar(mascota1);
-        repository.insertar(mascota2);
-
-        Mascota buscada = repository.buscarPorId(1000);
-        assertNotNull(buscada);
-        assertEquals("Primera", buscada.getNombre());
+        repository.insertar(mascota2); // Should throw
     }
 
     @Test

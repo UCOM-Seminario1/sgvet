@@ -142,23 +142,23 @@ public class MascotaUITest {
 
     @Test
     public void testEliminarMascotaConIdValido() {
-        // Primero crear una mascota para eliminar
-        String inputCrear = "1\nParaEliminar\nApellido\n2\n987654321\n200\nGato\nPersa\n";
+        // First, create a pet to delete
+        String inputCrear = "1\nParaEliminar\nApellido\n2\n987654321\n200\nGato\nPersa\n0\n";
         System.setIn(new ByteArrayInputStream(inputCrear.getBytes()));
         MascotaUI.menuMascotas();
 
         // Reset log handler
         logHandler.getLogRecords().clear();
 
-        // Ahora eliminar (usamos un ID que probablemente exista)
+        // Now delete (using an ID that likely exists)
         String inputEliminar = "3\n1\n0\n";
         System.setIn(new ByteArrayInputStream(inputEliminar.getBytes()));
 
         MascotaUI.menuMascotas();
 
-        // Verificar que se procesó la eliminación
+        // Verify that the deletion was processed
         assertTrue(logHandler.hasLogWithMessage("Mascota eliminada exitosamente") ||
-                  logHandler.hasLogWithMessage("No se encontró una mascota con ese ID"));
+            logHandler.hasLogWithMessage("No se encontró una mascota con ese ID"));
     }
 
     @Test
