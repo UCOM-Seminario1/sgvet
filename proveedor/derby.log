@@ -1,4 +1,11 @@
 ----------------------------------------------------------------
+Thu Jul 31 14:43:47 PYT 2025:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.15.2.0 - (1873585): instance a816c00e-0198-6195-3ecf-00000afef120 
+on database directory memory:C:\Users\Junior\Desktop\GIT rrhh\sgvet\proveedor\sgvetDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@511d50c0 
+Loaded from file:/C:/Users/Junior/.m2/repository/org/apache/derby/derby/10.15.2.0/derby-10.15.2.0.jar
+java.vendor=Eclipse Adoptium
+java.runtime.version=17.0.16+8
+user.dir=C:\Users\Junior\Desktop\GIT rrhh\sgvet\proveedor
 Thu Jul 31 19:19:30 PYT 2025:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.15.2.0 - (1873585): instance a816c00e-0198-62c8-99fb-00000d4a5dc8 
 on database directory memory:C:\Users\Gerardo\IdeaProjects\SpaceInvaders\sgvet\proveedor\sgvetDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@5e2de80c 

@@ -1,12 +1,12 @@
 package com.sgvet.rrhh.boundary;
 
-import com.sgvet.rrhh.control.RRHHController;
-import com.sgvet.rrhh.control.EvaluacionDesempenoController;
-import com.sgvet.rrhh.entity.RRHH;
-import com.sgvet.rrhh.entity.EvaluacionDesempeno;
-
 import java.util.List;
 import java.util.Scanner;
+
+import com.sgvet.rrhh.control.EvaluacionDesempenoController;
+import com.sgvet.rrhh.control.RRHHController;
+import com.sgvet.rrhh.entity.EvaluacionDesempeno;
+import com.sgvet.rrhh.entity.RRHH;
 
 public class RRHHUI {
 
@@ -64,12 +64,12 @@ public class RRHHUI {
     private static final String MSG_PERMISO_NO_SOLICITADO = "No se pudo solicitar el permiso. Verifique el ID.";
     private static final String MSG_VOLVIENDO_MENU_EVALUACIONES = "Volviendo al menú principal...";
     private static final String MSG_OPCION_INVALIDA_EVALUACIONES = "Opción inválida.";
-    private static final String MSG_EVALUACION_REGISTRADA = "✅ Evaluación registrada.";
+    private static final String MSG_EVALUACION_REGISTRADA = " Evaluación registrada.";
     private static final String MSG_NO_EVALUACIONES = "No se encontraron evaluaciones.";
-    private static final String MSG_ERROR_SALARIO = "❌ Error: El salario base debe ser mayor a 0.";
-    private static final String MSG_ERROR_PORCENTAJE = "❌ Error: El porcentaje de bonificación debe estar entre 0 y 100.";
-    private static final String MSG_ERROR_NUMEROS = "❌ Error: Por favor ingrese valores numéricos válidos.";
-    private static final String MSG_CALCULO_COMPLETADO = "✅ Cálculo completado exitosamente.";
+    private static final String MSG_ERROR_SALARIO = " Error: El salario base debe ser mayor a 0.";
+    private static final String MSG_ERROR_PORCENTAJE = " Error: El porcentaje de bonificación debe estar entre 0 y 100.";
+    private static final String MSG_ERROR_NUMEROS = " Error: Por favor ingrese valores numéricos válidos.";
+    private static final String MSG_CALCULO_COMPLETADO = " Cálculo completado exitosamente.";
 
     // Constants for prompts
     private static final String PROMPT_INGRESE_DATOS_RRHH = "Ingrese los datos del RRHH:";

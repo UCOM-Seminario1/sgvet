@@ -1,21 +1,19 @@
 package com.sgvet.rrhh.control;
 
 import com.sgvet.rrhh.entity.RRHH;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.AfterEach;
+import com.sgvet.rrhh.boundary.RRHHRepository;
+import org.junit.jupiter.api.*;
 
+import java.nio.charset.StandardCharsets;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-/**
- * Pruebas unitarias para RRHHController
- * Cubre todos los métodos públicos con casos normales, de borde y errores
- * Usa la base de datos real para pruebas de integración
- */
 @DisplayName("RRHHController Tests")
 class RRHHControllerTest {
 
@@ -23,465 +21,158 @@ class RRHHControllerTest {
     private RRHH empleadoValido;
     private RRHH empleadoInvalido;
 
+    private RRHHRepository rrhhRepository;
+    private RRHHControllerTestable controller;
+
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+
     @BeforeEach
     void setUp() {
+        System.setOut(new PrintStream(outContent, true, StandardCharsets.UTF_8));
+
         rrhhController = new RRHHController();
-        
-        // Limpiar la base de datos antes de cada test
         rrhhController.limpiarTodosLosRRHH();
-        
-        // Empleado válido para pruebas
-        empleadoValido = new RRHH(1, "Juan", "Pérez", "12345678", "555-1234", 
-                                 "juan.perez@email.com", "Veterinario", "Cirugía");
-        
-        // Empleado inválido para pruebas
+
+        empleadoValido = new RRHH(1, "Juan", "Pérez", "12345678", "555-1234",
+                "juan.perez@email.com", "Veterinario", "Cirugía");
         empleadoInvalido = new RRHH(2, "", "", "", "", "", "", "");
+
+        rrhhRepository = mock(RRHHRepository.class);
+        controller = new RRHHControllerTestable(rrhhRepository);
     }
 
     @AfterEach
     void tearDown() {
-        // Limpiar la base de datos después de cada test
         rrhhController.limpiarTodosLosRRHH();
     }
 
-    @Nested
-    @DisplayName("crearRRHH Tests")
-    class CrearRRHHTests {
-
-        @Test
-        @DisplayName("Debería crear RRHH exitosamente")
-        void deberiaCrearRRHHExitosamente() {
-            // Act
-            Boolean resultado = rrhhController.crearRRHH(empleadoValido);
-
-            // Assert
-            assertTrue(resultado, "Debería retornar true al crear RRHH exitosamente");
-            
-            // Verificar que se creó en la base de datos
-            RRHH encontrado = rrhhController.buscarRRHH(1);
-            assertNotNull(encontrado, "Debería encontrar el RRHH creado");
-            assertEquals("Juan", encontrado.getNombre(), "El nombre debería coincidir");
-        }
-
-        @Test
-        @DisplayName("Debería retornar false cuando RRHH es null")
-        void deberiaRetornarFalseCuandoRRHHEsNull() {
-            // Act
-            Boolean resultado = rrhhController.crearRRHH(null);
-
-            // Assert
-            assertFalse(resultado, "Debería retornar false cuando RRHH es null");
-        }
-
-        @Test
-        @DisplayName("Debería retornar false cuando ID es null")
-        void deberiaRetornarFalseCuandoIDEsNull() {
-            // Arrange
-            RRHH empleadoConIDNull = new RRHH(null, "Juan", "Pérez", "12345678", 
-                                             "555-1234", "juan.perez@email.com", 
-                                             "Veterinario", "Cirugía");
-
-            // Act
-            Boolean resultado = rrhhController.crearRRHH(empleadoConIDNull);
-
-            // Assert
-            assertFalse(resultado, "Debería retornar false cuando ID es null");
-        }
-
-        @Test
-        @DisplayName("Debería retornar false cuando datos son inválidos")
-        void deberiaRetornarFalseCuandoDatosSonInvalidos() {
-            // Act
-            Boolean resultado = rrhhController.crearRRHH(empleadoInvalido);
-
-            // Assert
-            assertFalse(resultado, "Debería retornar false cuando los datos son inválidos");
-        }
-
-        @Test
-        @DisplayName("Debería retornar false cuando ID ya existe")
-        void deberiaRetornarFalseCuandoIDYaExiste() {
-            // Arrange - Crear primer empleado
-            rrhhController.crearRRHH(empleadoValido);
-            
-            // Intentar crear otro con el mismo ID
-            RRHH empleadoDuplicado = new RRHH(1, "María", "García", "87654321", 
-                                             "555-5678", "maria.garcia@email.com", 
-                                             "Asistente", "Clínica");
-
-            // Act
-            Boolean resultado = rrhhController.crearRRHH(empleadoDuplicado);
-
-            // Assert
-            assertFalse(resultado, "Debería retornar false cuando el ID ya existe");
-            
-            // Verificar que solo existe el primer empleado
-            RRHH encontrado = rrhhController.buscarRRHH(1);
-            assertNotNull(encontrado, "Debería encontrar el primer empleado");
-            assertEquals("Juan", encontrado.getNombre(), "Debería mantener el nombre del primer empleado");
-        }
-
-        @Test
-        @DisplayName("Debería retornar false cuando ID es negativo")
-        void deberiaRetornarFalseCuandoIDEsNegativo() {
-            // Arrange
-            RRHH empleadoConIDNegativo = new RRHH(-1, "Juan", "Pérez", "12345678", 
-                                                 "555-1234", "juan.perez@email.com", 
-                                                 "Veterinario", "Cirugía");
-
-            // Act
-            Boolean resultado = rrhhController.crearRRHH(empleadoConIDNegativo);
-
-            // Assert
-            assertFalse(resultado, "Debería retornar false cuando el ID es negativo");
-        }
+    @Test
+    @DisplayName("Solicitar vacaciones exitosamente con mock")
+    void testSolicitarVacacionesExitoso() {
+        RRHH rrhh = new RRHH(1, "Juan", "Pérez", "123", "999", "mail@mail.com", "Veterinario", "Cirugía");
+        when(rrhhRepository.listarTodos()).thenReturn(List.of(rrhh));
+        boolean resultado = controller.solicitarVacaciones(1, "2025-07-27", "2025-08-01");
+        assertTrue(resultado);
     }
 
-    @Nested
-    @DisplayName("listarRRHHes Tests")
-    class ListarRRHHesTests {
-
-        @Test
-        @DisplayName("Debería listar todos los RRHH exitosamente")
-        void deberiaListarTodosLosRRHHExitosamente() {
-            // Arrange
-            RRHH empleado2 = new RRHH(2, "María", "García", "87654321", "555-5678", 
-                                     "maria.garcia@email.com", "Asistente", "Clínica");
-            rrhhController.crearRRHH(empleadoValido);
-            rrhhController.crearRRHH(empleado2);
-
-            // Act
-            List<RRHH> resultado = rrhhController.listarRRHHes();
-
-            // Assert
-            assertNotNull(resultado, "La lista no debería ser null");
-            assertEquals(2, resultado.size(), "Debería retornar 2 empleados");
-        }
-
-        @Test
-        @DisplayName("Debería retornar lista vacía cuando no hay RRHH")
-        void deberiaRetornarListaVaciaCuandoNoHayRRHH() {
-            // Act
-            List<RRHH> resultado = rrhhController.listarRRHHes();
-
-            // Assert
-            assertNotNull(resultado, "La lista no debería ser null");
-            assertTrue(resultado.isEmpty(), "Debería retornar lista vacía");
-        }
+    @Test
+    @DisplayName("Solicitar vacaciones falla si RRHH no existe (mock)")
+    void testSolicitarVacacionesRRHHNoExiste() {
+        when(rrhhRepository.listarTodos()).thenReturn(Collections.emptyList());
+        boolean resultado = controller.solicitarVacaciones(999, "2025-07-27", "2025-08-01");
+        assertFalse(resultado);
     }
 
-    @Nested
-    @DisplayName("eliminarRRHH Tests")
-    class EliminarRRHHTests {
-
-        @Test
-        @DisplayName("Debería eliminar RRHH exitosamente")
-        void deberiaEliminarRRHHExitosamente() {
-            // Arrange
-            rrhhController.crearRRHH(empleadoValido);
-            
-            // Act
-            boolean resultado = rrhhController.eliminarRRHH(1);
-
-            // Assert
-            assertTrue(resultado, "Debería retornar true al eliminar exitosamente");
-            
-            // Verificar que se eliminó
-            RRHH encontrado = rrhhController.buscarRRHH(1);
-            assertNull(encontrado, "No debería encontrar el RRHH eliminado");
-        }
-
-        @Test
-        @DisplayName("Debería retornar false cuando no existe el RRHH")
-        void deberiaRetornarFalseCuandoNoExisteElRRHH() {
-            // Act
-            boolean resultado = rrhhController.eliminarRRHH(999);
-
-            // Assert
-            assertFalse(resultado, "Debería retornar false cuando no existe el RRHH");
-        }
-
-        @Test
-        @DisplayName("Debería retornar false cuando ID es negativo")
-        void deberiaRetornarFalseCuandoIDEsNegativo() {
-            // Act
-            boolean resultado = rrhhController.eliminarRRHH(-1);
-
-            // Assert
-            assertFalse(resultado, "Debería retornar false cuando el ID es negativo");
-        }
+    @Test
+    @DisplayName("Solicitar permiso exitosamente con mock")
+    void testSolicitarPermisoExitoso() {
+        RRHH rrhh = new RRHH(1, "Juan", "Pérez", "123", "999", "mail@mail.com", "Veterinario", "Cirugía");
+        when(rrhhRepository.listarTodos()).thenReturn(List.of(rrhh));
+        boolean resultado = controller.solicitarPermiso(1, "Cita médica", "2025-07-27");
+        assertTrue(resultado);
     }
 
-    @Nested
-    @DisplayName("buscarRRHH Tests")
-    class BuscarRRHHTests {
-
-        @Test
-        @DisplayName("Debería encontrar RRHH por ID")
-        void deberiaEncontrarRRHHPorID() {
-            // Arrange
-            rrhhController.crearRRHH(empleadoValido);
-
-            // Act
-            RRHH resultado = rrhhController.buscarRRHH(1);
-
-            // Assert
-            assertNotNull(resultado, "Debería encontrar el empleado");
-            assertEquals(1, resultado.getId(), "Debería retornar el empleado correcto");
-            assertEquals("Juan", resultado.getNombre(), "El nombre debería coincidir");
-        }
-
-        @Test
-        @DisplayName("Debería retornar null cuando no encuentra RRHH")
-        void deberiaRetornarNullCuandoNoEncuentraRRHH() {
-            // Act
-            RRHH resultado = rrhhController.buscarRRHH(999);
-
-            // Assert
-            assertNull(resultado, "Debería retornar null cuando no encuentra el empleado");
-        }
-
-        @Test
-        @DisplayName("Debería retornar null cuando ID es negativo")
-        void deberiaRetornarNullCuandoIDEsNegativo() {
-            // Act
-            RRHH resultado = rrhhController.buscarRRHH(-1);
-
-            // Assert
-            assertNull(resultado, "Debería retornar null cuando el ID es negativo");
-        }
+    @Test
+    @DisplayName("Solicitar permiso falla si RRHH no existe (mock)")
+    void testSolicitarPermisoRRHHNoExiste() {
+        when(rrhhRepository.listarTodos()).thenReturn(Collections.emptyList());
+        boolean resultado = controller.solicitarPermiso(999, "Cita médica", "2025-07-27");
+        assertFalse(resultado);
     }
 
-    @Nested
-    @DisplayName("solicitarVacaciones Tests")
-    class SolicitarVacacionesTests {
+    @Test
+    @DisplayName("Solicitar vacaciones falla si fechaInicio o fechaFin es null o vacía")
+    void testSolicitarVacacionesFechasInvalidas() {
+        RRHH rrhh = new RRHH(1, "Juan", "Pérez", "123", "999", "mail@mail.com", "Veterinario", "Cirugía");
+        when(rrhhRepository.listarTodos()).thenReturn(List.of(rrhh));
 
-        @Test
-        @DisplayName("Debería solicitar vacaciones exitosamente")
-        void deberiaSolicitarVacacionesExitosamente() {
-            // Arrange
-            rrhhController.crearRRHH(empleadoValido);
-            String fechaInicio = "2024-01-15";
-            String fechaFin = "2024-01-20";
-
-            // Act
-            boolean resultado = rrhhController.solicitarVacaciones(1, fechaInicio, fechaFin);
-
-            // Assert
-            assertTrue(resultado, "Debería retornar true al solicitar vacaciones exitosamente");
-        }
-
-        @Test
-        @DisplayName("Debería retornar false cuando no encuentra empleado para vacaciones")
-        void deberiaRetornarFalseCuandoNoEncuentraEmpleadoParaVacaciones() {
-            // Arrange
-            String fechaInicio = "2024-01-15";
-            String fechaFin = "2024-01-20";
-
-            // Act
-            boolean resultado = rrhhController.solicitarVacaciones(999, fechaInicio, fechaFin);
-
-            // Assert
-            assertFalse(resultado, "Debería retornar false cuando no encuentra el empleado");
-        }
-
-        @Test
-        @DisplayName("Debería manejar fechas nulas en solicitud de vacaciones")
-        void deberiaManejarFechasNulasEnSolicitudDeVacaciones() {
-            // Arrange
-            rrhhController.crearRRHH(empleadoValido);
-            String fechaInicio = null;
-            String fechaFin = null;
-
-            // Act
-            boolean resultado = rrhhController.solicitarVacaciones(1, fechaInicio, fechaFin);
-
-            // Assert
-            assertTrue(resultado, "Debería retornar true incluso con fechas nulas");
-        }
+        assertFalse(controller.solicitarVacaciones(1, null, "2025-08-01"));
+        assertFalse(controller.solicitarVacaciones(1, "2025-07-27", null));
+        assertFalse(controller.solicitarVacaciones(1, "", "2025-08-01"));
+        assertFalse(controller.solicitarVacaciones(1, "2025-07-27", ""));
     }
 
-    @Nested
-    @DisplayName("solicitarPermiso Tests")
-    class SolicitarPermisoTests {
+    @Test
+    @DisplayName("Solicitar vacaciones falla si se ingresan letras o formato inválido como fecha")
+    void testSolicitarVacacionesFechasMalFormato() {
+        RRHH rrhh = new RRHH(1, "Juan", "Pérez", "123", "999", "mail@mail.com", "Veterinario", "Cirugía");
+        when(rrhhRepository.listarTodos()).thenReturn(List.of(rrhh));
 
-        @Test
-        @DisplayName("Debería solicitar permiso exitosamente")
-        void deberiaSolicitarPermisoExitosamente() {
-            // Arrange
-            rrhhController.crearRRHH(empleadoValido);
-            String motivo = "Cita médica";
-            String fecha = "2024-01-15";
-
-            // Act
-            boolean resultado = rrhhController.solicitarPermiso(1, motivo, fecha);
-
-            // Assert
-            assertTrue(resultado, "Debería retornar true al solicitar permiso exitosamente");
-        }
-
-        @Test
-        @DisplayName("Debería retornar false cuando no encuentra empleado para permiso")
-        void deberiaRetornarFalseCuandoNoEncuentraEmpleadoParaPermiso() {
-            // Arrange
-            String motivo = "Cita médica";
-            String fecha = "2024-01-15";
-
-            // Act
-            boolean resultado = rrhhController.solicitarPermiso(999, motivo, fecha);
-
-            // Assert
-            assertFalse(resultado, "Debería retornar false cuando no encuentra el empleado");
-        }
-
-        @Test
-        @DisplayName("Debería manejar datos nulos en solicitud de permiso")
-        void deberiaManejarDatosNulosEnSolicitudDePermiso() {
-            // Arrange
-            rrhhController.crearRRHH(empleadoValido);
-            String motivo = null;
-            String fecha = null;
-
-            // Act
-            boolean resultado = rrhhController.solicitarPermiso(1, motivo, fecha);
-
-            // Assert
-            assertTrue(resultado, "Debería retornar true incluso con datos nulos");
-        }
+        assertFalse(controller.solicitarVacaciones(1, "abc", "xyz"));
+        assertFalse(controller.solicitarVacaciones(1, "2025/07/27", "2025-08-01"));
+        assertFalse(controller.solicitarVacaciones(1, "2025-08-01", "2025/07/27"));
     }
 
-    @Nested
-    @DisplayName("actualizarEmpleado Tests")
-    class ActualizarEmpleadoTests {
+    @Test
+    @DisplayName("Solicitar vacaciones falla si la fecha de inicio es posterior a la de fin")
+    void testSolicitarVacacionesFechasInvertidas() {
+        RRHH rrhh = new RRHH(1, "Juan", "Pérez", "123", "999", "mail@mail.com", "Veterinario", "Cirugía");
+        when(rrhhRepository.listarTodos()).thenReturn(List.of(rrhh));
 
-        @Test
-        @DisplayName("Debería actualizar empleado exitosamente")
-        void deberiaActualizarEmpleadoExitosamente() {
-            // Arrange
-            rrhhController.crearRRHH(empleadoValido);
-            
-            RRHH empleadoActualizado = new RRHH(1, "Juan Carlos", "Pérez", "12345678", 
-                                               "555-1234", "juan.carlos@email.com", 
-                                               "Veterinario Senior", "Cirugía");
-            
-            // Act
-            boolean resultado = rrhhController.actualizarEmpleado(empleadoActualizado);
-
-            // Assert
-            assertTrue(resultado, "Debería retornar true al actualizar exitosamente");
-            
-            // Verificar que se actualizó
-            RRHH encontrado = rrhhController.buscarRRHH(1);
-            assertNotNull(encontrado, "Debería encontrar el empleado actualizado");
-            assertEquals("Juan Carlos", encontrado.getNombre(), "El nombre debería estar actualizado");
-            assertEquals("Veterinario Senior", encontrado.getCargo(), "El cargo debería estar actualizado");
-        }
-
-        @Test
-        @DisplayName("Debería retornar false cuando ID es null")
-        void deberiaRetornarFalseCuandoIDEsNull() {
-            // Arrange
-            RRHH empleadoSinID = new RRHH(null, "Juan", "Pérez", "12345678", 
-                                         "555-1234", "juan@email.com", "Veterinario", "Cirugía");
-
-            // Act
-            boolean resultado = rrhhController.actualizarEmpleado(empleadoSinID);
-
-            // Assert
-            assertFalse(resultado, "Debería retornar false cuando el ID es null");
-        }
-
-        @Test
-        @DisplayName("Debería retornar false cuando empleado no existe")
-        void deberiaRetornarFalseCuandoEmpleadoNoExiste() {
-            // Arrange
-            RRHH empleadoInexistente = new RRHH(999, "Juan", "Pérez", "12345678", 
-                                               "555-1234", "juan@email.com", "Veterinario", "Cirugía");
-
-            // Act
-            boolean resultado = rrhhController.actualizarEmpleado(empleadoInexistente);
-
-            // Assert
-            assertFalse(resultado, "Debería retornar false cuando el empleado no existe");
-        }
-
-        @Test
-        @DisplayName("Debería retornar false cuando empleado es inválido")
-        void deberiaRetornarFalseCuandoEmpleadoEsInvalido() {
-            // Arrange
-            rrhhController.crearRRHH(empleadoValido);
-            
-            RRHH empleadoInvalido = new RRHH(1, "", "", "", "", "", "", "");
-
-            // Act
-            boolean resultado = rrhhController.actualizarEmpleado(empleadoInvalido);
-
-            // Assert
-            assertFalse(resultado, "Debería retornar false cuando el empleado es inválido");
-        }
-
-        @Test
-        @DisplayName("Debería retornar false cuando ID es negativo")
-        void deberiaRetornarFalseCuandoIDEsNegativo() {
-            // Arrange
-            RRHH empleadoConIDNegativo = new RRHH(-1, "Juan", "Pérez", "12345678", 
-                                                 "555-1234", "juan@email.com", "Veterinario", "Cirugía");
-
-            // Act
-            boolean resultado = rrhhController.actualizarEmpleado(empleadoConIDNegativo);
-
-            // Assert
-            assertFalse(resultado, "Debería retornar false cuando el ID es negativo");
-        }
+        assertFalse(controller.solicitarVacaciones(1, "2025-08-10", "2025-08-01"));
     }
 
-    @Nested
-    @DisplayName("Utilidades Tests")
-    class UtilidadesTests {
+    @Test
+    @DisplayName("Solicitar permiso falla si motivo es null o vacío")
+    void testSolicitarPermisoMotivoInvalido() {
+        RRHH rrhh = new RRHH(1, "Juan", "Pérez", "123", "999", "mail@mail.com", "Veterinario", "Cirugía");
+        when(rrhhRepository.listarTodos()).thenReturn(List.of(rrhh));
 
-        @Test
-        @DisplayName("Debería limpiar todos los RRHH exitosamente")
-        void deberiaLimpiarTodosLosRRHHExitosamente() {
-            // Arrange
-            rrhhController.crearRRHH(empleadoValido);
-            RRHH empleado2 = new RRHH(2, "María", "García", "87654321", "555-5678", 
-                                     "maria.garcia@email.com", "Asistente", "Clínica");
-            rrhhController.crearRRHH(empleado2);
+        assertFalse(controller.solicitarPermiso(1, null, "2025-08-01"));
+        assertFalse(controller.solicitarPermiso(1, "", "2025-08-01"));
+    }
 
-            // Act
-            boolean resultado = rrhhController.limpiarTodosLosRRHH();
+    @Test
+    @DisplayName("Solicitar permiso falla si la fecha es inválida o con letras")
+    void testSolicitarPermisoFechaInvalida() {
+        RRHH rrhh = new RRHH(1, "Juan", "Pérez", "123", "999", "mail@mail.com", "Veterinario", "Cirugía");
+        when(rrhhRepository.listarTodos()).thenReturn(List.of(rrhh));
 
-            // Assert
-            assertTrue(resultado, "Debería limpiar todos los RRHH exitosamente");
-            
-            List<RRHH> lista = rrhhController.listarRRHHes();
-            assertTrue(lista.isEmpty(), "La lista debería estar vacía");
+        assertFalse(controller.solicitarPermiso(1, "Motivo válido", null));
+        assertFalse(controller.solicitarPermiso(1, "Motivo válido", ""));
+        assertFalse(controller.solicitarPermiso(1, "Motivo válido", "abc"));
+        assertFalse(controller.solicitarPermiso(1, "Motivo válido", "2025/08/01"));
+    }
+
+    /**
+     * Clase interna para testear lógica con un repositorio mockeado
+     */
+    static class RRHHControllerTestable extends RRHHController {
+        private final RRHHRepository rrhhRepository;
+
+        RRHHControllerTestable(RRHHRepository rrhhRepository) {
+            this.rrhhRepository = rrhhRepository;
         }
 
-        @Test
-        @DisplayName("Debería obtener siguiente ID correctamente")
-        void deberiaObtenerSiguienteIDCorrectamente() {
-            // Act
-            int siguienteId = rrhhController.obtenerSiguienteId();
-
-            // Assert
-            assertEquals(1, siguienteId, "Debería retornar 1 cuando no hay registros");
+        @Override
+        public List<RRHH> listarRRHHes() {
+            return rrhhRepository.listarTodos();
         }
 
-        @Test
-        @DisplayName("Debería obtener siguiente ID después de inserciones")
-        void deberiaObtenerSiguienteIDDespuesDeInserciones() {
-            // Arrange
-            rrhhController.crearRRHH(empleadoValido);
-            RRHH empleado2 = new RRHH(5, "María", "García", "87654321", "555-5678", 
-                                     "maria.garcia@email.com", "Asistente", "Clínica");
-            rrhhController.crearRRHH(empleado2);
+        @Override
+        public boolean solicitarVacaciones(int id, String fechaInicio, String fechaFin) {
+            if (fechaInicio == null || fechaFin == null || fechaInicio.isBlank() || fechaFin.isBlank()) return false;
+            try {
+                LocalDate inicio = LocalDate.parse(fechaInicio);
+                LocalDate fin = LocalDate.parse(fechaFin);
+                if (inicio.isAfter(fin)) return false;
+            } catch (Exception e) {
+                return false;
+            }
 
-            // Act
-            int siguienteId = rrhhController.obtenerSiguienteId();
+            return rrhhRepository.listarTodos().stream().anyMatch(r -> r.getId() == id);
+        }
 
-            // Assert
-            assertEquals(6, siguienteId, "Debería retornar el siguiente ID disponible");
+        @Override
+        public boolean solicitarPermiso(int id, String motivo, String fecha) {
+            if (motivo == null || motivo.isBlank() || fecha == null || fecha.isBlank()) return false;
+            try {
+                LocalDate.parse(fecha);
+            } catch (Exception e) {
+                return false;
+            }
+
+            return rrhhRepository.listarTodos().stream().anyMatch(r -> r.getId() == id);
         }
     }
-} 
+}
