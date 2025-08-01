@@ -191,4 +191,18 @@ public class ClienteRepository {
             return false;
         }
     }
+
+    public Boolean eliminarCliente(Integer id) {
+        String sql = "DELETE FROM CLIENTE WHERE ID = ?";
+
+        try (PreparedStatement ps = ClienteDbManager.getConnection().prepareStatement(sql)) {
+            ps.setInt(1, id);
+            
+            int filasAfectadas = ps.executeUpdate();
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
