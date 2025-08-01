@@ -84,5 +84,15 @@ public class ClienteController {
         }
     }
     
+    public Boolean eliminarCliente(Integer id) {
+        // Lógica para eliminar un cliente por ID
+        try {
+            return clienteRepository.eliminarCliente(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
 }
 
