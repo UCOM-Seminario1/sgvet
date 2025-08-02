@@ -7,6 +7,9 @@ import org.junit.Test;
 
 import java.util.List;
 
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThrows;
+
 public class ProveedorRepositoryTest {
 
     private static ProveedorRepository proveedorRepository;
@@ -44,7 +47,7 @@ public class ProveedorRepositoryTest {
     @Test
     public void testBuscarPorIdNoExistente() {
         Proveedor proveedor = proveedorRepository.buscarPorId(999);
-        Assert.assertNull("No debe encontrar proveedor con ID inexistente", proveedor);
+        assertNull("No debe encontrar proveedor con ID inexistente", proveedor);
     }
 
     @Test
@@ -108,17 +111,31 @@ public class ProveedorRepositoryTest {
         Assert.assertEquals("No debe encontrar proveedores", 0, proveedores.size());
     }
 
-    // @Test
-    // public void testExisteCorreoEnOtroProveedor() {
-    //     // Probar con un correo que existe en otro proveedor
-    //     boolean existe = proveedorRepository.existeCorreoEnOtroProveedor("contacto@animalia.com", 2);
-    //     Assert.assertTrue("Debe detectar que el correo existe en otro proveedor", existe);
-    // }
+    @Test
+    public void testExisteCorreoEnOtroProveedor() {
+        // Probar con un correo que existe en otro proveedor
+        boolean existe = proveedorRepository.existeCorreoEnOtroProveedor("contacto@animalia.com", 2);
+        Assert.assertTrue("Debe detectar que el correo existe en otro proveedor", existe);
+    }
 
-    // @Test
-    // public void testNoExisteCorreoEnOtroProveedor() {
-    //     // Probar con un correo que no existe
-    //     boolean existe = proveedorRepository.existeCorreoEnOtroProveedor("correo_inexistente@test.com", 1);
-    //     Assert.assertFalse("No debe detectar el correo como existente", existe);
-    // }
+    @Test
+    public void testNoExisteCorreoEnOtroProveedor() {
+        // Probar con un correo que no existe
+        boolean existe = proveedorRepository.existeCorreoEnOtroProveedor("correo_inexistente@test.com", 1);
+        Assert.assertFalse("No debe detectar el correo como existente", existe);
+    }
+    @Test
+    public void testInsertarProveedorConCamposNulos() {
+        Proveedor proveedor = new Proveedor(null, null, null, null, null);
+        assertThrows(IllegalArgumentException.class, () -> proveedorRepository.insertar(proveedor));
+    }
+    @Test
+    public void testInsertarProveedorDuplicadoCorreo() {
+        Proveedor p1 = new Proveedor(null, "A", "RS", "123", "a@mail.com");
+        Proveedor p2 = new Proveedor(null, "B", "RS", "456", "a@mail.com"); // mismo correo
+
+        proveedorRepository.insertar(p1);
+        assertThrows(IllegalArgumentException.class, () -> proveedorRepository.insertar(p2));
+    }
+
 }
