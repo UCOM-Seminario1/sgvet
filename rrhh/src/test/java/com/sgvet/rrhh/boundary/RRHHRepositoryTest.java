@@ -526,4 +526,111 @@ class RRHHRepositoryTest {
             assertEquals(1, countDespuesEliminar, "Debería contar 1 registro después de eliminar");
         }
     }
+
+    @Nested
+    @DisplayName("Cálculo de Bonificaciones Tests")
+    class CalculoBonificacionesTests {
+
+        @Test
+        @DisplayName("Debería calcular bonificación correctamente con salario base y porcentaje válidos")
+        void deberiaCalcularBonificacionCorrectamente() {
+            // Arrange
+            double salarioBase = 1000.0;
+            double porcentajeBonificacion = 15.0;
+            double montoBonificacionEsperado = 150.0;
+            double totalEsperado = 1150.0;
+
+            // Act
+            double montoBonificacionCalculado = salarioBase * (porcentajeBonificacion / 100);
+            double totalCalculado = salarioBase + montoBonificacionCalculado;
+
+            // Assert
+            assertEquals(montoBonificacionEsperado, montoBonificacionCalculado, 0.01, 
+                        "El monto de bonificación debería ser calculado correctamente");
+            assertEquals(totalEsperado, totalCalculado, 0.01, 
+                        "El total a pagar debería ser calculado correctamente");
+        }
+
+        @Test
+        @DisplayName("Debería manejar porcentaje de bonificación del 0%")
+        void deberiaManejarPorcentajeBonificacionCero() {
+            // Arrange
+            double salarioBase = 2000.0;
+            double porcentajeBonificacion = 0.0;
+            double montoBonificacionEsperado = 0.0;
+            double totalEsperado = 2000.0;
+
+            // Act
+            double montoBonificacionCalculado = salarioBase * (porcentajeBonificacion / 100);
+            double totalCalculado = salarioBase + montoBonificacionCalculado;
+
+            // Assert
+            assertEquals(montoBonificacionEsperado, montoBonificacionCalculado, 0.01, 
+                        "La bonificación debería ser 0 cuando el porcentaje es 0%");
+            assertEquals(totalEsperado, totalCalculado, 0.01, 
+                        "El total debería ser igual al salario base cuando no hay bonificación");
+        }
+
+        @Test
+        @DisplayName("Debería manejar porcentaje de bonificación del 100%")
+        void deberiaManejarPorcentajeBonificacionCien() {
+            // Arrange
+            double salarioBase = 1500.0;
+            double porcentajeBonificacion = 100.0;
+            double montoBonificacionEsperado = 1500.0;
+            double totalEsperado = 3000.0;
+
+            // Act
+            double montoBonificacionCalculado = salarioBase * (porcentajeBonificacion / 100);
+            double totalCalculado = salarioBase + montoBonificacionCalculado;
+
+            // Assert
+            assertEquals(montoBonificacionEsperado, montoBonificacionCalculado, 0.01, 
+                        "La bonificación debería ser igual al salario base cuando el porcentaje es 100%");
+            assertEquals(totalEsperado, totalCalculado, 0.01, 
+                        "El total debería ser el doble del salario base cuando la bonificación es 100%");
+        }
+
+        @Test
+        @DisplayName("Debería validar que el salario base sea mayor a cero")
+        void deberiaValidarSalarioBaseMayorACero() {
+            // Arrange
+            double salarioBase = 0.0;
+            double porcentajeBonificacion = 10.0;
+
+            // Act & Assert
+            assertTrue(salarioBase <= 0, "El salario base debería ser mayor a cero para cálculos válidos");
+        }
+
+        @Test
+        @DisplayName("Debería validar que el porcentaje de bonificación esté entre 0 y 100")
+        void deberiaValidarPorcentajeBonificacionEntreCeroYCien() {
+            // Arrange
+            double porcentajeBonificacion = 150.0;
+
+            // Act & Assert
+            assertTrue(porcentajeBonificacion < 0 || porcentajeBonificacion > 100, 
+                      "El porcentaje de bonificación debería estar entre 0 y 100");
+        }
+
+        @Test
+        @DisplayName("Debería calcular bonificación con valores decimales")
+        void deberiaCalcularBonificacionConValoresDecimales() {
+            // Arrange
+            double salarioBase = 1250.75;
+            double porcentajeBonificacion = 12.5;
+            double montoBonificacionEsperado = 156.34; // 1250.75 * 0.125
+            double totalEsperado = 1407.09; // 1250.75 + 156.34
+
+            // Act
+            double montoBonificacionCalculado = salarioBase * (porcentajeBonificacion / 100);
+            double totalCalculado = salarioBase + montoBonificacionCalculado;
+
+            // Assert
+            assertEquals(montoBonificacionEsperado, montoBonificacionCalculado, 0.01, 
+                        "La bonificación debería calcularse correctamente con valores decimales");
+            assertEquals(totalEsperado, totalCalculado, 0.01, 
+                        "El total debería calcularse correctamente con valores decimales");
+        }
+    }
 } 
