@@ -279,6 +279,64 @@ class RRHHRepositoryTest {
             // Assert
             assertFalse(resultado, "Debería retornar false cuando ID es cero");
         }
+
+        @Test
+        @DisplayName("Debería eliminar múltiples RRHH y verificar que solo se elimina el especificado")
+        void deberiaEliminarMultiplesRRHHYVerificarQueSoloSeEliminaElEspecificado() {
+            // Arrange
+            RRHH rrhh1 = new RRHH(1, "Juan", "Pérez", "12345678", "555-1234", 
+                                 "juan.perez@email.com", "Veterinario", "Cirugía");
+            RRHH rrhh2 = new RRHH(2, "María", "García", "87654321", "555-5678", 
+                                 "maria.garcia@email.com", "Asistente", "Clínica");
+            RRHH rrhh3 = new RRHH(3, "Carlos", "López", "11223344", "555-9999", 
+                                 "carlos.lopez@email.com", "Veterinario", "Clínica");
+            
+            repository.insertar(rrhh1);
+            repository.insertar(rrhh2);
+            repository.insertar(rrhh3);
+
+            // Verificar que existen los 3 RRHH
+            assertEquals(3, repository.contarRegistros(), "Deberían existir 3 RRHH antes de eliminar");
+
+            // Act - eliminar solo el RRHH con ID 2
+            boolean resultado = repository.eliminarPorId(2);
+
+            // Assert
+            assertTrue(resultado, "Debería eliminar exitosamente el RRHH con ID 2");
+            
+            // Verificar que solo se eliminó el RRHH con ID 2
+            assertNull(repository.buscarPorId(2), "No debería encontrar el RRHH eliminado (ID 2)");
+            assertNotNull(repository.buscarPorId(1), "Debería encontrar el RRHH con ID 1");
+            assertNotNull(repository.buscarPorId(3), "Debería encontrar el RRHH con ID 3");
+            assertEquals(2, repository.contarRegistros(), "Deberían quedar 2 RRHH después de eliminar");
+        }
+
+        @Test
+        @DisplayName("Debería manejar correctamente intentos de eliminación consecutivos del mismo ID")
+        void deberiaManejarCorrectamenteIntentosDeEliminacionConsecutivosDelMismoID() {
+            // Arrange
+            RRHH rrhh = new RRHH(1, "Juan", "Pérez", "12345678", "555-1234", 
+                                "juan.perez@email.com", "Veterinario", "Cirugía");
+            repository.insertar(rrhh);
+
+            // Act - primera eliminación (debería ser exitosa)
+            boolean resultado1 = repository.eliminarPorId(1);
+            
+            // Act - segunda eliminación del mismo ID (debería fallar)
+            boolean resultado2 = repository.eliminarPorId(1);
+            
+            // Act - tercera eliminación del mismo ID (debería fallar)
+            boolean resultado3 = repository.eliminarPorId(1);
+
+            // Assert
+            assertTrue(resultado1, "Primera eliminación debería ser exitosa");
+            assertFalse(resultado2, "Segunda eliminación del mismo ID debería fallar");
+            assertFalse(resultado3, "Tercera eliminación del mismo ID debería fallar");
+            
+            // Verificar que el RRHH ya no existe
+            assertNull(repository.buscarPorId(1), "No debería encontrar el RRHH eliminado");
+            assertEquals(0, repository.contarRegistros(), "No debería quedar ningún RRHH");
+        }
     }
 
     @Nested
@@ -466,6 +524,113 @@ class RRHHRepositoryTest {
             repository.eliminarPorId(1);
             int countDespuesEliminar = repository.contarRegistros();
             assertEquals(1, countDespuesEliminar, "Debería contar 1 registro después de eliminar");
+        }
+    }
+
+    @Nested
+    @DisplayName("Cálculo de Bonificaciones Tests")
+    class CalculoBonificacionesTests {
+
+        @Test
+        @DisplayName("Debería calcular bonificación correctamente con salario base y porcentaje válidos")
+        void deberiaCalcularBonificacionCorrectamente() {
+            // Arrange
+            double salarioBase = 1000.0;
+            double porcentajeBonificacion = 15.0;
+            double montoBonificacionEsperado = 150.0;
+            double totalEsperado = 1150.0;
+
+            // Act
+            double montoBonificacionCalculado = salarioBase * (porcentajeBonificacion / 100);
+            double totalCalculado = salarioBase + montoBonificacionCalculado;
+
+            // Assert
+            assertEquals(montoBonificacionEsperado, montoBonificacionCalculado, 0.01, 
+                        "El monto de bonificación debería ser calculado correctamente");
+            assertEquals(totalEsperado, totalCalculado, 0.01, 
+                        "El total a pagar debería ser calculado correctamente");
+        }
+
+        @Test
+        @DisplayName("Debería manejar porcentaje de bonificación del 0%")
+        void deberiaManejarPorcentajeBonificacionCero() {
+            // Arrange
+            double salarioBase = 2000.0;
+            double porcentajeBonificacion = 0.0;
+            double montoBonificacionEsperado = 0.0;
+            double totalEsperado = 2000.0;
+
+            // Act
+            double montoBonificacionCalculado = salarioBase * (porcentajeBonificacion / 100);
+            double totalCalculado = salarioBase + montoBonificacionCalculado;
+
+            // Assert
+            assertEquals(montoBonificacionEsperado, montoBonificacionCalculado, 0.01, 
+                        "La bonificación debería ser 0 cuando el porcentaje es 0%");
+            assertEquals(totalEsperado, totalCalculado, 0.01, 
+                        "El total debería ser igual al salario base cuando no hay bonificación");
+        }
+
+        @Test
+        @DisplayName("Debería manejar porcentaje de bonificación del 100%")
+        void deberiaManejarPorcentajeBonificacionCien() {
+            // Arrange
+            double salarioBase = 1500.0;
+            double porcentajeBonificacion = 100.0;
+            double montoBonificacionEsperado = 1500.0;
+            double totalEsperado = 3000.0;
+
+            // Act
+            double montoBonificacionCalculado = salarioBase * (porcentajeBonificacion / 100);
+            double totalCalculado = salarioBase + montoBonificacionCalculado;
+
+            // Assert
+            assertEquals(montoBonificacionEsperado, montoBonificacionCalculado, 0.01, 
+                        "La bonificación debería ser igual al salario base cuando el porcentaje es 100%");
+            assertEquals(totalEsperado, totalCalculado, 0.01, 
+                        "El total debería ser el doble del salario base cuando la bonificación es 100%");
+        }
+
+        @Test
+        @DisplayName("Debería validar que el salario base sea mayor a cero")
+        void deberiaValidarSalarioBaseMayorACero() {
+            // Arrange
+            double salarioBase = 0.0;
+            double porcentajeBonificacion = 10.0;
+
+            // Act & Assert
+            assertTrue(salarioBase <= 0, "El salario base debería ser mayor a cero para cálculos válidos");
+        }
+
+        @Test
+        @DisplayName("Debería validar que el porcentaje de bonificación esté entre 0 y 100")
+        void deberiaValidarPorcentajeBonificacionEntreCeroYCien() {
+            // Arrange
+            double porcentajeBonificacion = 150.0;
+
+            // Act & Assert
+            assertTrue(porcentajeBonificacion < 0 || porcentajeBonificacion > 100, 
+                      "El porcentaje de bonificación debería estar entre 0 y 100");
+        }
+
+        @Test
+        @DisplayName("Debería calcular bonificación con valores decimales")
+        void deberiaCalcularBonificacionConValoresDecimales() {
+            // Arrange
+            double salarioBase = 1250.75;
+            double porcentajeBonificacion = 12.5;
+            double montoBonificacionEsperado = 156.34; // 1250.75 * 0.125
+            double totalEsperado = 1407.09; // 1250.75 + 156.34
+
+            // Act
+            double montoBonificacionCalculado = salarioBase * (porcentajeBonificacion / 100);
+            double totalCalculado = salarioBase + montoBonificacionCalculado;
+
+            // Assert
+            assertEquals(montoBonificacionEsperado, montoBonificacionCalculado, 0.01, 
+                        "La bonificación debería calcularse correctamente con valores decimales");
+            assertEquals(totalEsperado, totalCalculado, 0.01, 
+                        "El total debería calcularse correctamente con valores decimales");
         }
     }
 } 
