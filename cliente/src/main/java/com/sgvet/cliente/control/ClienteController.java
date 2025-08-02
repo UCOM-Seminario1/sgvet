@@ -28,5 +28,71 @@ public class ClienteController {
         // Lógica para listar todos los clientes
         return clienteRepository.listarTodos();
     }
+    // Métodos de búsqueda
+    public Cliente buscarClientePorId(Integer id) {
+        try {
+            return clienteRepository.buscarPorId(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public List<Cliente> buscarClientesPorNombre(String nombre) {
+        try {
+            return clienteRepository.buscarPorNombre(nombre);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<Cliente> buscarClientesPorApellido(String apellido) {
+        try {
+            return clienteRepository.buscarPorApellido(apellido);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<Cliente> buscarClientesPorTelefono(String telefono) {
+        try {
+            return clienteRepository.buscarPorTelefono(telefono);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<Cliente> buscarClientesGeneral(String criterio) {
+        try {
+            return clienteRepository.buscarGeneral(criterio);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public Boolean modificarCliente(Cliente cliente) {
+        // Lógica para modificar un cliente
+        try {
+            return clienteRepository.modificarCliente(cliente);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    public Boolean eliminarCliente(Integer id) {
+        // Lógica para eliminar un cliente por ID
+        try {
+            return clienteRepository.eliminarCliente(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
     
 }
+

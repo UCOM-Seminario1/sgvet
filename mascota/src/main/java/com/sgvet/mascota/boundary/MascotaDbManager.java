@@ -1,14 +1,7 @@
 package com.sgvet.mascota.boundary;
-
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.file.Paths;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 import com.sgvet.base.boundary.BaseDbManager;
 
 public class MascotaDbManager {
