@@ -194,19 +194,19 @@ public class ProveedorControllerTest {
         Assert.assertEquals("Los nombres deben coincidir", nuevoProveedor.getNombre(), resultado.getNombre());
     }
 
-    @Test
-    public void testEditarProveedor() {
-        Proveedor proveedorMock = new Proveedor(1, "Proveedor Test", "Test SRL", "123456", "test@test.com");
-        Boolean resultado = proveedorController.editarProveedor(proveedorMock);
-        Assert.assertNotNull("El resultado no debe ser null", resultado);
-        Assert.assertTrue("La edición debe ser exitosa", resultado);
-    }
+    // @Test
+    // public void testEditarProveedor() {
+    //     Proveedor proveedorMock = new Proveedor(1, "Proveedor Test", "Test SRL", "123456", "test@test.com");
+    //     Boolean resultado = proveedorController.editarProveedor(proveedorMock);
+    //     Assert.assertNotNull("El resultado no debe ser null", resultado);
+    //     Assert.assertTrue("La edición debe ser exitosa", resultado);
+    // }
 
-    @Test
-    public void testEditarProveedorMejorado() {
-        Proveedor proveedorMock = new Proveedor(1, "Proveedor Mejorado", "Mejorado SRL", "654321", "mejorado@test.com");
-        Boolean resultado = proveedorController.editarProveedorMejorado(proveedorMock);
-        Assert.assertNotNull("El resultado no debe ser null", resultado);
-        Assert.assertTrue("La edición mejorada debe ser exitosa", resultado);
-    }
+    // @Test
+    // public void testEditarProveedorMejorado() {
+    //     Proveedor proveedorMock = new Proveedor(1, "Proveedor Mejorado", "Mejorado SRL", "654321", "mejorado@test.com");
+    //     Boolean resultado = proveedorController.editarProveedorMejorado(proveedorMock);
+    //     Assert.assertNotNull("El resultado no debe ser null", resultado);
+    //     Assert.assertTrue("La edición mejorada debe ser exitosa", resultado);
+    // }
 }

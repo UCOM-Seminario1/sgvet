@@ -36,15 +36,33 @@ public class MascotaController {
         return mascotaRepository.eliminarPorId(id);
     }
     
-    public Mascota buscarMascotaPorId(int id) {
+    public Mascota buscarMascotaPorId(Integer id) {
+        if (id == null) {
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.log(Level.WARNING, "El valor de id es requerido");
+            }
+            throw new IllegalArgumentException("El valor de id es requerido");
+        }
         return mascotaRepository.buscarPorId(id);
     }
 
     public List<Mascota> buscarMascotasPorNombre(String nombre) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.log(Level.WARNING, "El valor de nombre es requerido");
+            }
+            throw new IllegalArgumentException("El valor de nombre es requerido");
+        }
         return mascotaRepository.buscarPorNombre(nombre);
     }
 
-    public List<Mascota> buscarMascotasPorCliente(int idCliente) {
+    public List<Mascota> buscarMascotasPorCliente(Integer idCliente) {
+        if (idCliente == null) {
+            if (logger.isLoggable(Level.WARNING)) {
+                logger.log(Level.WARNING, "El valor de idCliente es requerido");
+            }
+            throw new IllegalArgumentException("El valor de idCliente es requerido");
+        }
         return mascotaRepository.buscarPorCliente(idCliente);
     }
 
