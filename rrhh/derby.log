@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Fri Aug 01 20:08:28 ART 2025:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.15.2.0 - (1873585): instance a816c00e-0198-67e4-d82b-00000a9a1b80 
+on database directory memory:C:\Users\User\Downloads\sgvet-develop\sgvet\rrhh\sgvetDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@5a07e868 
+Loaded from file:/C:/Users/User/.m2/repository/org/apache/derby/derby/10.15.2.0/derby-10.15.2.0.jar
+java.vendor=Eclipse Adoptium
+java.runtime.version=21.0.8+9-LTS
+user.dir=C:\Users\User\Downloads\sgvet-develop\sgvet\rrhh
+os.name=Windows 11
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

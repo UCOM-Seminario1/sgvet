@@ -2,7 +2,6 @@ package com.sgvet.proveedor.boundary;
 import java.util.List;
 import java.util.Scanner;
 
-import com.sgvet.proveedor.boundary.CompraUI;
 import com.sgvet.proveedor.control.ProveedorController;
 import com.sgvet.proveedor.entity.Proveedor;
 
@@ -114,7 +113,7 @@ public class ProveedorUI {
         // Aquí iría la lógica para buscar un proveedor
     }
 
-    private static void editarProveedor(Scanner scanner) {
+    public static void editarProveedor(Scanner scanner) {
         System.out.println("\n" + "═".repeat(60));
         System.out.println("          🔧 EDITAR PROVEEDOR - TESTING");
         System.out.println("═".repeat(60));
