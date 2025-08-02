@@ -1,7 +1,7 @@
 package com.sgvet.proveedor.util;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.Assert;
+import org.junit.jupiter.api.Test;
 
 public class ProveedorValidadorTest {
 
