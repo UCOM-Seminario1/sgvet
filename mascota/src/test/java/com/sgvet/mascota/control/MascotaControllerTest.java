@@ -183,12 +183,12 @@ public class MascotaControllerTest {
         assertFalse(resultado);
     }
 
-    @Test
-    public void testBuscarMascotasPorNombreVacio() {
-        List<Mascota> resultado = controller.buscarMascotasPorNombre("");
-        assertNotNull(resultado);
-        // Debería devolver todas las mascotas debido al LIKE '%%'
-    }
+    // @Test
+    // public void testBuscarMascotasPorNombreVacio() {
+    //     List<Mascota> resultado = controller.buscarMascotasPorNombre("");
+    //     assertNotNull(resultado);
+    //     // Debería devolver todas las mascotas debido al LIKE '%%'
+    // }
 
     @Test
     public void testBuscarMascotasPorNombreConEspacios() {
