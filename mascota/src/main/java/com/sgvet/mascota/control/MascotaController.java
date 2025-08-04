@@ -15,12 +15,16 @@ public class MascotaController {
 
     public Boolean crearMascota(Mascota mascota) {
         // Lógica para crear un Mascota
-        try{
+        try {
             mascotaRepository.insertar(mascota);
             return true;
         } 
         catch (Exception e) {
-            logger.log(Level.SEVERE, "Error al insertar mascota " + mascota.getNombre(), e);
+            if (mascota != null && mascota.getNombre() != null) {
+                logger.log(Level.SEVERE, "Error al insertar mascota " + mascota.getNombre(), e);
+            } else {
+                logger.log(Level.SEVERE, "Error al insertar mascota desconocida", e);
+            }
             return false;
         }
     }
