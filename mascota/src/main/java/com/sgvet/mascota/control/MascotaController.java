@@ -13,14 +13,14 @@ public class MascotaController {
     // Aquí puedes agregar métodos para manejar las solicitudes relacionadas con los Mascotas
     // Por ejemplo, crear, actualizar, eliminar y listar Mascotas
 
-    public Boolean crearMascota(Mascota Mascota) {
+    public Boolean crearMascota(Mascota mascota) {
         // Lógica para crear un Mascota
         try{
-            mascotaRepository.insertar(Mascota);
+            mascotaRepository.insertar(mascota);
             return true;
         } 
         catch (Exception e) {
-            logger.log(Level.SEVERE, () -> "Error al crear mascota: " + Mascota.getNombre(), e);
+            logger.log(Level.SEVERE, "Error al insertar mascota " + mascota.getNombre(), e);
             return false;
         }
     }
