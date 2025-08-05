@@ -23,8 +23,9 @@ public class ProveedorUI {
             System.out.println("3. Editar proveedor");
             System.out.println("4. Eliminar proveedor");
             System.out.println("5. Buscar proveedor");
+            System.out.println("6. Gestionar pedidos"); // Nueva opción
             System.out.println("0. Volver al menu principal");
-            System.out.print("Seleccione una opcion (0-5): ");
+            System.out.print("Seleccione una opcion (0-6): ");
 
             if (scanner.hasNextInt()) {
                 opcion = scanner.nextInt();
@@ -44,6 +45,9 @@ public class ProveedorUI {
                         break;
                     case 5:
                         buscarProveedor(scanner);
+                        break;
+                    case 6:
+                        gestionarPedidos(scanner); // Nueva funcionalidad
                         break;
                     case 0:
                         System.out.println("Volviendo al menu principal...");
@@ -84,7 +88,7 @@ public class ProveedorUI {
         Proveedor guardado = proveedorController.registrarProveedor(proveedor);
         System.out.println("Proveedor registrado exitosamente: " + guardado);
     }
-
+    
     private static void listarProveedors() {
         System.out.println("Funcionalidad para listar Proveedors (pendiente de implementar).");
         List<Proveedor> listaProveedores=  proveedorController.listarProveedores();
@@ -417,5 +421,89 @@ public class ProveedorUI {
         if (str == null) return "";
         if (str.length() <= maxLength) return str;
         return str.substring(0, maxLength - 3) + "...";
+    }
+
+    private static void gestionarPedidos(Scanner scanner) {
+        System.out.println("\n--- Gestionar Pedidos ---");
+        int opcion = -1;
+
+        while (opcion != 0) {
+            System.out.println("\n1. Crear pedido");
+            System.out.println("2. Listar pedidos");
+            System.out.println("3. Editar pedido");
+            System.out.println("4. Eliminar pedido");
+            System.out.println("0. Volver al menú anterior");
+            System.out.print("Seleccione una opción (0-4): ");
+
+            if (scanner.hasNextInt()) {
+                opcion = scanner.nextInt();
+                scanner.nextLine(); // Limpiar buffer
+                switch (opcion) {
+                    case 1:
+                        crearPedido(scanner);
+                        break;
+                    case 2:
+                        listarPedidos();
+                        break;
+                    case 3:
+                        editarPedido(scanner);
+                        break;
+                    case 4:
+                        eliminarPedido(scanner);
+                        break;
+                    case 0:
+                        System.out.println("Volviendo al menú anterior...");
+                        break;
+                    default:
+                        System.out.println("Opción inválida. Intente de nuevo.");
+                }
+            } else {
+                System.out.println("Por favor, ingrese un número válido.");
+                scanner.next(); // Limpiar entrada inválida
+            }
+        }
+    }
+
+    private static void crearPedido(Scanner scanner) {
+        System.out.println("=== Crear nuevo pedido ===");
+        System.out.print("Ingrese el ID del proveedor: ");
+        int proveedorId = scanner.nextInt();
+        scanner.nextLine(); // Limpiar buffer
+
+        System.out.print("Ingrese la descripción del pedido: ");
+        String descripcion = scanner.nextLine();
+
+        System.out.print("Ingrese la cantidad: ");
+        int cantidad = scanner.nextInt();
+        scanner.nextLine(); // Limpiar buffer
+
+        System.out.println("Pedido creado exitosamente para el proveedor con ID: " + proveedorId);
+        // Aquí se llamaría al controlador para registrar el pedido
+    }
+
+    private static void listarPedidos() {
+        System.out.println("=== Listar pedidos ===");
+        System.out.println("Funcionalidad para listar pedidos (pendiente de implementar).");
+        // Aquí se llamaría al controlador para obtener y mostrar los pedidos
+    }
+
+    private static void editarPedido(Scanner scanner) {
+        System.out.println("=== Editar pedido ===");
+        System.out.print("Ingrese el ID del pedido a editar: ");
+        int pedidoId = scanner.nextInt();
+        scanner.nextLine(); // Limpiar buffer
+
+        System.out.println("Funcionalidad para editar pedido con ID: " + pedidoId + " (pendiente de implementar).");
+        // Aquí se llamaría al controlador para editar el pedido
+    }
+
+    private static void eliminarPedido(Scanner scanner) {
+        System.out.println("=== Eliminar pedido ===");
+        System.out.print("Ingrese el ID del pedido a eliminar: ");
+        int pedidoId = scanner.nextInt();
+        scanner.nextLine(); // Limpiar buffer
+
+        System.out.println("Funcionalidad para eliminar pedido con ID: " + pedidoId + " (pendiente de implementar).");
+        // Aquí se llamaría al controlador para eliminar el pedido
     }
 }
